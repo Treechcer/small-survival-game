@@ -1,11 +1,12 @@
 function startGame(map){
     const game = document.getElementById("game");
+    game.innerHTML = "";
 
     for (let y = 0; y < 10; y++){
         var color;
         var line = '<div class="mainG">';
         for (let i = 0; i < 10; i++){
-            if (player.position.x == y && player.position.x == i){
+            if (player.position.y == y && player.position.x == i){
                 color = "orange";
             }
             else if (map[y][i] == "bush"){
@@ -25,17 +26,17 @@ function startGame(map){
     }
     game.innerHTML += '<div style="display:flex;"> \
     <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"><p> </p></div> \
-    <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p>↑</p></div> \
+    <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,-1)">↑</p></div> \
     <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;"><p> </p></div> \
 </div>';
     game.innerHTML += '<div style="display:flex;"> \
-    <div id="mid-left" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p>←</p></div> \
+    <div id="mid-left" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(-1,0)">←</p></div> \
     <div id="mid-mid" class="gameS" style="height:50px; width:50px; background-color:gray;"><p>≡</p></div> \
-    <div id="mid-right" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p>→</p></div> \
+    <div id="mid-right" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(1,0)">→</p></div> \
 </div>';
     game.innerHTML += '<div style="display:flex;"> \
     <div id="bot-left"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
-    <div id="bot-mid"class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p>↓</></div> \
+    <div id="bot-mid"class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,1)">↓</p></div> \
     <div id="bot-right"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
 </div>';
 }
@@ -64,8 +65,15 @@ function generateMap(){
     return map;
 }
 
-var player = {
-    position : {x : 0, y : 0}
+function move(x, y){
+    player.position.x += x;
+    player.position.y += y;
+    startGame(map);
 }
 
-startGame(generateMap());
+var player = {
+    position : {x : 0, y : 2}
+}
+
+var map = generateMap();
+startGame(map);
