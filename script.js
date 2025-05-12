@@ -68,12 +68,29 @@ function generateMap(){
 function move(x, y){
     player.position.x += x;
     player.position.y += y;
-    startGame(map);
+    startGame(world.map);
+}
+
+function everythingTime(){
+    world.time.minute += 30;
+    
+    world.time.minute == 60 ? (()=>{world.time.hour++;
+    world.time.minute = 0})() : null;
+    
+    world.time.hour == 24 ? (world.time.hour = 0, world.time.day++) : null;
+    
+    document.getElementById("time").innerHTML = `${world.time.hour} : ${world.time.minute}`
 }
 
 var player = {
     position : {x : 0, y : 2}
 }
 
-var map = generateMap();
-startGame(map);
+var world = {
+    map : generateMap(),
+    time : {day : 0, hour : 12, minute : 0}
+}
+
+setInterval(everythingTime, 1000)
+
+startGame(world.map);
