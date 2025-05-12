@@ -5,7 +5,6 @@ function startGame(map){
         var color;
         var line = '<div class="mainG">';
         for (let i = 0; i < 10; i++){
-            console.log(map[i][y]);
             if (player.position.x == y && player.position.x == i){
                 color = "orange";
             }
@@ -24,7 +23,6 @@ function startGame(map){
 
         game.innerHTML += line;   
     }
-    game.innerHTML += '<div class="center">'
     game.innerHTML += '<div style="display:flex;"> \
     <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"><p> </p></div> \
     <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p>↑</p></div> \
@@ -40,7 +38,6 @@ function startGame(map){
     <div id="bot-mid"class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p>↓</></div> \
     <div id="bot-right"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
 </div>';
-    game.innerHTML += "</div>"
 }
 
 function generateMap(){
