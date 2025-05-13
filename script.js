@@ -32,7 +32,7 @@ function startGame(map){
     }
     var p0 = `<p> </p>`
     if (bonusButtons.length != 0){
-        p0 = `<p> ${bonusButtons[0].buttonIcon} </p>`
+        p0 = `<p ${bonusButtons[0].action}> ${bonusButtons[0].buttonIcon} </p>`
     }
 
     game.innerHTML += `<div style="display:flex;"> \
@@ -74,6 +74,16 @@ function generateMap(){
     }
 
     return map;
+}
+
+function chop(){
+    console.log(player.inventory);
+
+    if (world.map[player.position.y][player.position.x] == "bush"){
+        world.map[player.position.y][player.position.x] = "";
+        player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
+        player.inventory.leaves += Math.floor(Math.random() * 3) + 2;
+    }
 }
 
 function move(x, y){
@@ -125,12 +135,13 @@ function everythingTime(){
 }
 
 var player = {
-    position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10)}
+    position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10)},
+    inventory : {leaves : 0, sticks : 0}
 }
 
 var world = {
     map : generateMap(),
-    time : {day : 0, hour : 12, minute : 0}
+    time : {day : 0, hour : 12, minute : 0},
 }
 
 setInterval(everythingTime, 500)
