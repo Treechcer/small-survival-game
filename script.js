@@ -24,21 +24,32 @@ function startGame(map){
 
         game.innerHTML += line;   
     }
-    game.innerHTML += '<div style="display:flex;"> \
-    <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"><p> </p></div> \
+
+    var bonusButtons = [];
+    //console.log(player.position, map[player.position.y][player.position.x])
+    if (map[player.position.y][player.position.x] == "bush"){
+        bonusButtons.push({action: 'onclick="chop()"', buttonIcon : "🌲"})
+    }
+    var p0 = `<p> </p>`
+    if (bonusButtons.length != 0){
+        p0 = `<p ${bonusButtons[0].action}> ${bonusButtons[0].buttonIcon} </p>`
+    }
+
+    game.innerHTML += `<div style="display:flex;"> \
+    <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
     <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,-1)">↑</p></div> \
     <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;"><p> </p></div> \
-</div>';
-    game.innerHTML += '<div style="display:flex;"> \
+</div>`;
+    game.innerHTML += `<div style="display:flex;"> \
     <div id="mid-left" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(-1,0)">←</p></div> \
     <div id="mid-mid" class="gameS" style="height:50px; width:50px; background-color:gray;"><p>≡</p></div> \
     <div id="mid-right" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(1,0)">→</p></div> \
-</div>';
-    game.innerHTML += '<div style="display:flex;"> \
+</div>`;
+    game.innerHTML += `<div style="display:flex;"> \
     <div id="bot-left"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
     <div id="bot-mid"class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,1)">↓</p></div> \
     <div id="bot-right"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
-</div>';
+</div>`;
 }
 
 function generateMap(){
@@ -65,15 +76,74 @@ function generateMap(){
     return map;
 }
 
+function chop(){
+    console.log(player.inventory);
+
+    if (world.map[player.position.y][player.position.x] == "bush"){
+        world.map[player.position.y][player.position.x] = "";
+        player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
+        player.inventory.leaves += Math.floor(Math.random() * 3) + 2;
+    }
+}
+
 function move(x, y){
-    player.position.x += x;
-    player.position.y += y;
-    startGame(map);
+    if (!(player.position.x + x <= -1 || player.position.x + x >= 10) && !(player.position.y + y <= -1 || player.position.y + y >= 10)){
+        player.position.x += x;
+        player.position.y += y;
+        startGame(world.map);
+    }
+}
+
+function everythingTime(){
+    world.time.minute += 30;
+    
+    world.time.minute == 60 ? (()=>{world.time.hour++;
+    world.time.minute = 0})() : null;
+    
+    world.time.hour == 24 ? (world.time.hour = 0, world.time.day++) : null;
+    
+    //document.getElementById("time").innerHTML = `${world.time.hour} : ${world.time.minute}`
+
+    var body = document.querySelector("body");
+    if (world.time.hour == 0) {
+        body.style.backgroundColor = "dimgray";
+    }
+    else if (world.time.hour == 6) {
+        body.style.backgroundColor = "darkgray";
+    }
+    else if (world.time.hour == 8) {
+        body.style.backgroundColor = "gray";
+    }
+    else if (world.time.hour == 10) {
+        body.style.backgroundColor = "lightgray";
+    }
+    else if (world.time.hour == 12) {
+        body.style.backgroundColor = "whitesmoke";
+    }
+    else if (world.time.hour == 14) {
+        body.style.backgroundColor = "gainsboro";
+    }
+    else if (world.time.hour == 16) {
+        body.style.backgroundColor = "lightgray";
+    }
+    else if (world.time.hour == 18) {
+        body.style.backgroundColor = "darkgray";
+    }
+    else if (world.time.hour == 20) {
+        body.style.backgroundColor = "dimgray";
+    }
 }
 
 var player = {
-    position : {x : 0, y : 2}
+    position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10)},
+    inventory : {leaves : 0, sticks : 0}
 }
 
-var map = generateMap();
-startGame(map);
+var world = {
+    map : generateMap(),
+    time : {day : 0, hour : 12, minute : 0},
+}
+
+setInterval(everythingTime, 500)
+
+startGame(world.map);
