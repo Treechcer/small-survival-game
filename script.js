@@ -25,20 +25,23 @@ function startGame(map){
         game.innerHTML += line;   
     }
 
-    var bonusButtons = [];
+    var bonusButtons = {mine: {}, build: {}};
     //console.log(player.position, map[player.position.y][player.position.x])
-    if (map[player.position.y][player.position.x] == "bush"){
-        bonusButtons.push({action: 'onclick="chop()"', buttonIcon : "🌲"})
-    }
     var p0 = `<p> </p>`
-    if (bonusButtons.length != 0){
-        p0 = `<p ${bonusButtons[0].action}> ${bonusButtons[0].buttonIcon} </p>`
+    var p1 = `<p> </p>`
+    if (map[player.position.y][player.position.x] == "bush"){
+        bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🌲"}
+        p0 = `<p ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </p>`
+    }
+    else if (map[player.position.y][player.position.x] == ""){
+        bonusButtons.build = {action: 'onclick="build()"', buttonIcon : "🏠"}
+        p1 = `<p ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </p>`
     }
 
     game.innerHTML += `<div style="display:flex;"> \
     <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
     <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,-1)">↑</p></div> \
-    <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;"><p> </p></div> \
+    <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
 </div>`;
     game.innerHTML += `<div style="display:flex;"> \
     <div id="mid-left" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(-1,0)">←</p></div> \
@@ -76,6 +79,10 @@ function generateMap(){
     return map;
 }
 
+function build(){
+    // TODO: make the building work, hopefully add more things? maybe upgrades? maybe other things? farms? 
+}
+
 function chop(){
     console.log(player.inventory);
 
@@ -83,6 +90,7 @@ function chop(){
         world.map[player.position.y][player.position.x] = "";
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
         player.inventory.leaves += Math.floor(Math.random() * 3) + 2;
+        startGame(world.map);
     }
 }
 
@@ -144,6 +152,6 @@ var world = {
     time : {day : 0, hour : 12, minute : 0},
 }
 
-setInterval(everythingTime, 500)
+setInterval(everythingTime, 12500)
 
 startGame(world.map);
