@@ -114,25 +114,22 @@ function move(x, y){
     if (!(player.position.x + x <= -1 || player.position.x + x >= 11) && !(player.position.y + y <= -1 || player.position.y + y >= 11)){
         player.position.x += x;
         player.position.y += y;
-        if (player.position.x == 0 && player.position.y == 5){
+        if (player.position.x == 0 && player.position.y == 5 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num - 1);
             player.position.x = 9;
         }
-        else if (player.position.x == 10 && player.position.y == 5){
+        else if (player.position.x == 10 && player.position.y == 5 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num + 1);
             player.position.x = 1;
         }
-        else if (player.position.x == 5 && player.position.y == 0){
+        else if (player.position.x == 5 && player.position.y == 0 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num - 3);
             player.position.y = 9;
         }
-        else if (player.position.x == 5 && player.position.y == 10){
+        else if (player.position.x == 5 && player.position.y == 10 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num + 3);
             player.position.y = 1;
         }
-
-        console.log(player.position)
-
         startGame(world.maps[player.position.map].map);
     }
 }
