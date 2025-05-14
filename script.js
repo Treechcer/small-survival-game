@@ -18,6 +18,9 @@ function startGame(map){
             else if (map[y][i] == "nextMap"){
                 color = "red";
             }
+            else if (map[y][i] == "farm"){
+                color = "brown";
+            }
             else{
                 color = "lightgreen";
             }
@@ -37,7 +40,7 @@ function startGame(map){
         p0 = `<p ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </p>`
     }
     else if (map[player.position.y][player.position.x] == ""){
-        bonusButtons.build = {action: 'onclick="build()"', buttonIcon : "🏠"}
+        bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
         p1 = `<p ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </p>`
     }
 
@@ -95,8 +98,29 @@ function generateMap(exitT, exitB, exitL, exitR){ //these variables are true or 
     return map;
 }
 
-function build(){
-    // TODO: make the building work, hopefully add more things? maybe upgrades? maybe other things? farms? 
+function build(building){
+    // TODO: make the building work, hopefully add more things? maybe upgrades? maybe other things? farms?
+
+    if (building == "farm"){
+        world.maps[player.position.map].map[player.position.y][player.position.x] = "farm";
+        world.farms["farm" + world.farms.increasingNum] = {
+            pos : {
+                posX : player.position.x,
+                posY : player.position.y,
+                mop : player.position.map
+            },
+            phase : 1,
+            time : {
+                hour : world.time.hour,
+                minut : world.time.minute,
+                day : world.time.day
+            }
+        }
+
+        world.farms.increasingNum++;
+        
+        console.log(world.farms)
+    }
 }
 
 function chop(){
@@ -191,6 +215,13 @@ var world = {
         map7 : {map : generateMap(true, false, false, true), num : 7},
         map8 : {map : generateMap(true, false, true, true), num : 8},
         map9 : {map : generateMap(true, false, true, false), num : 9}
+    },
+    farms : {
+        increasingNum : 0,
+        // hierarchy ==>
+        // world -> farms -> farm + increasingNum (0-n) -> {position : {X, Y, MAP}, 
+        // phase : 1-5, time : {placeTime : 
+        // {world.time.hour , world.time.minute, world.time.day}}}
     }
 }
 
