@@ -107,7 +107,7 @@ function build(building){
             pos : {
                 posX : player.position.x,
                 posY : player.position.y,
-                mop : player.position.map
+                map : player.position.map
             },
             phase : 1,
             time : {
