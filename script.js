@@ -2,10 +2,10 @@ function startGame(map){
     const game = document.getElementById("game");
     game.innerHTML = "";
 
-    for (let y = 0; y < 10; y++){
+    for (let y = 0; y < map.length; y++){
         var color;
         var line = '<div class="mainG">';
-        for (let i = 0; i < 10; i++){
+        for (let i = 0; i < map.length; i++){
             if (player.position.y == y && player.position.x == i){
                 color = "orange";
             }
@@ -14,6 +14,9 @@ function startGame(map){
             }
             else if(map[y][i] == "water"){
                 color = "DeepSkyBlue";
+            }
+            else if (map[y][i] == "nextMap"){
+                color = "red";
             }
             else{
                 color = "lightgreen";
@@ -55,12 +58,12 @@ function startGame(map){
 </div>`;
 }
 
-function generateMap(){
+function generateMap(exitT, exitB, exitL, exitR){ //these variables are true or false to disables exits
     var map = [];
-    for (let i = 0; i < 10; i++){
+    for (let i = 0; i < 11; i++){
         let row = [];
-        for (let j = 0; j < 10; j++){
-            var element = Math.random()*2.5;
+        for (let j = 0; j < 11; j++){
+            var element = Math.random()*3;
             var mapPart;
             if (element > 1.7){
                 mapPart = "bush";
@@ -76,6 +79,19 @@ function generateMap(){
         map[i] = row;
     }
 
+    if (exitT){
+        map[0][5] = "nextMap"
+    }
+    if (exitB){
+        map[10][5] = "nextMap"
+    }
+    if (exitL){
+        map[5][0] = "nextMap"
+    }
+    if (exitR){
+        map[5][10] = "nextMap"
+    }
+
     return map;
 }
 
@@ -86,19 +102,38 @@ function build(){
 function chop(){
     console.log(player.inventory);
 
-    if (world.map[player.position.y][player.position.x] == "bush"){
-        world.map[player.position.y][player.position.x] = "";
+    if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
+        world.maps[player.position.map].map[player.position.y][player.position.x] = "";
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
         player.inventory.leaves += Math.floor(Math.random() * 3) + 2;
-        startGame(world.map);
+        startGame(world.maps[player.position.map].map);
     }
 }
 
 function move(x, y){
-    if (!(player.position.x + x <= -1 || player.position.x + x >= 10) && !(player.position.y + y <= -1 || player.position.y + y >= 10)){
+    if (!(player.position.x + x <= -1 || player.position.x + x >= 11) && !(player.position.y + y <= -1 || player.position.y + y >= 11)){
         player.position.x += x;
         player.position.y += y;
-        startGame(world.map);
+        if (player.position.x == 0 && player.position.y == 5){
+            player.position.map = "map" + (world.maps[player.position.map].num - 1);
+            player.position.x = 9;
+        }
+        else if (player.position.x == 10 && player.position.y == 5){
+            player.position.map = "map" + (world.maps[player.position.map].num + 1);
+            player.position.x = 1;
+        }
+        else if (player.position.x == 5 && player.position.y == 0){
+            player.position.map = "map" + (world.maps[player.position.map].num - 3);
+            player.position.y = 9;
+        }
+        else if (player.position.x == 5 && player.position.y == 10){
+            player.position.map = "map" + (world.maps[player.position.map].num + 3);
+            player.position.y = 1;
+        }
+
+        console.log(player.position)
+
+        startGame(world.maps[player.position.map].map);
     }
 }
 
@@ -143,15 +178,25 @@ function everythingTime(){
 }
 
 var player = {
-    position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10)},
-    inventory : {leaves : 0, sticks : 0}
+    position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map5"},
+    inventory : {leaves : 0, sticks : 0},
 }
 
 var world = {
-    map : generateMap(),
     time : {day : 0, hour : 12, minute : 0},
+    maps : {
+        map1 : {map : generateMap(false, true, false, true), num : 1},
+        map2 : {map : generateMap(false, true, true, true), num : 2},
+        map3 : {map : generateMap(false, true, true, false), num : 3},
+        map4 : {map : generateMap(true, true, false, true), num : 4},
+        map5 : {map : generateMap(true, true, true, true), num : 5},
+        map6 : {map : generateMap(true, true, true, false), num : 6},
+        map7 : {map : generateMap(true, false, false, true), num : 7},
+        map8 : {map : generateMap(true, false, true, true), num : 8},
+        map9 : {map : generateMap(true, false, true, false), num : 9}
+    }
 }
 
 setInterval(everythingTime, 12500)
 
-startGame(world.map);
+startGame(world.maps[player.position.map].map);
