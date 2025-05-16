@@ -1,4 +1,4 @@
-# Small Survival Game / Grid Survival Game !HTML + JS)
+# Small Survival Game / Grid Survival Game (HTML + JS)
 
 This game is small survival grid based game, that runs in browser that is made with purely CSS, HTML and JS. The player moves in grid based layout (11x11, with nine maps) where he can chop bushes, build farms (they don't work for now), explore the maps.
 
