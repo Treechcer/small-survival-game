@@ -50,7 +50,7 @@ xdg-open index.html  # On Linux
 
 Or, you can use local server (tbh I have no idea how, you have to figure that out for yourself)
 
-Last alternative, you can use (Github pages)[https://treechcer.github.io/small-survival-game/]
+Last alternative, you can use [Github pages](https://treechcer.github.io/small-survival-game/)
 
 🛠️ Requirements
 - Modern browser (Chrome, Firefox, Edge, etc.)
