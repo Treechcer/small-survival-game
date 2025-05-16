@@ -123,9 +123,10 @@ function build(building){
         }
 
         world.farms.increasingNum++;
-        
         console.log(world.farms)
     }
+
+    buttoTest();
 }
 
 function chop(){
