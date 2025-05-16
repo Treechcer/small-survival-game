@@ -1,3 +1,57 @@
-# Small Survival Game
+# Small Survival Game / Grid Survival Game !HTML + JS)
 
-This will be small survival grid based game. Now there is only map that is 10x10 that's randomly generated. There can be generated nothing / grass, bushes and watter. You can't for now move, interact with anythong or anything else. It'll be updated ofc.
+This game is small sruvival grid based game, that runs in browser that is made with purly CSS, HTML and JS. The player moves in grid based layout (11x11, with nine maps) where he can chop bushes, build farms (they don't work for now), explore the maps.
+
+# Functions
+
+- grid based movement, where playe uses the "console" at the bottom
+- interation with envirment
+  - chop bushes
+  - build famrs
+- randomly generated world
+  - 9 maps, in 3x3
+  - all maps are randomly generated with random terraion (watter, bushes and grass for now)
+- dynamic day / night cycle
+  - background changes with time of the day
+  - every 12.5 seconds is 30 minuts in-game (which makes the whole day last 10 minutes)
+
+# Game World
+
+- The whole map consists of 9 smallers maprs connected with exits to the other maps
+- player spawn on random tile in map5 (maybe thing to change later?)
+- all maps have exits to other maps (dynamicly generated so they have different ammount of exits)
+
+# Future plans
+
+- Crafting
+- farming system (making the farms grow for real) and adding hunger / thirts
+- inventory (UI) and crafting
+- more type of blocks and actions
+
+Getting Started
+To run the project locally:
+
+1. Clone the repository
+```bash
+git clone https://github.com/Treechcer/small-survival-game
+cd small-survival-game
+```
+
+2. Open the game
+You can open the index.html file directly in your browser:
+
+```bash
+start index.html     # On Windows
+# or
+open index.html      # On macOS
+# or
+xdg-open index.html  # On Linux
+```
+
+Or, you can use local server (tbh I have no idea how, you have to figure that out for yourself)
+
+Last alternative, you can use (Github pages)[https://treechcer.github.io/small-survival-game/]
+
+🛠️ Requirements
+- Modern browser (Chrome, Firefox, Edge, etc.)
+- No external libraries required
