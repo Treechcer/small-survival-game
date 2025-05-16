@@ -22,33 +22,39 @@ function startGame(map){
 function buttoTest(){
     var bonusButtons = {mine: {}, build: {}};
     //console.log(player.position, map[player.position.y][player.position.x])
-    var p0 = `<p> </p>`
-    var p1 = `<p> </p>`
+    var p0 = `<button style="cursor:default"> </button>`;
+    var p1 = p0;
+    var p2 = p0;
+    var p3 = p0;
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
         bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🌲"}
-        p0 = `<p ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </p>`
+        p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone"){
+        bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🪨"}
+        p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == ""){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
-        p1 = `<p ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </p>`
+        p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
     }
 
     var button = document.getElementById("butts");
     button.innerHTML = "";
     button.innerHTML += `<div style="display:flex;"> \
-    <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
-    <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,-1,)">↑</p></div> \
-    <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
+    <div id="top-left" class="gameS buttons" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
+    <div id="top-mid" class="gameS buttons" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(0,-1,)">↑</button></div> \
+    <div id="top-right" class="gameS buttons" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
 </div>`;
     button.innerHTML += `<div style="display:flex;"> \
-    <div id="mid-left" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(-1,0)">←</p></div> \
-    <div id="mid-mid" class="gameS" style="height:50px; width:50px; background-color:gray;"><p>≡</p></div> \
-    <div id="mid-right" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(1,0)">→</p></div> \
+    <div id="mid-left" class="gameS buttons" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(-1,0)">←</button></div> \
+    <div id="mid-mid" class="gameS buttons" style="height:50px; width:50px; background-color:gray;"><button>≡</button></div> \
+    <div id="mid-right" class="gameS buttons" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(1,0)">→</button></div> \
 </div>`;
     button.innerHTML += `<div style="display:flex;"> \
-    <div id="bot-left"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
-    <div id="bot-mid"class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,1)">↓</p></div> \
-    <div id="bot-right"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
+    <div id="bot-left"class="gameS buttons" style="height:50px; width:50px; background-color:gray;"> ${p2} </div> \
+    <div id="bot-mid"class="gameS buttons" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(0,1)">↓</button></div> \
+    <div id="bot-right"class="gameS buttons" style="height:50px; width:50px; background-color:gray;"> ${p3} </div> \
 </div>`;
 }
 
@@ -64,7 +70,10 @@ function generateMap(exitT, exitB, exitL, exitR){ //these variables are true or 
         for (let j = 0; j < 11; j++){
             var element = Math.random()*3;
             var mapPart;
-            if (element > 1.7){
+            if (element > 2.85){
+                mapPart = "stone";
+            }
+            else if(element > 1.7){
                 mapPart = "bush";
             }
             else if (element > 1.3){
@@ -120,14 +129,21 @@ function build(building){
 }
 
 function chop(){
-    console.log(player.inventory);
-
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
         player.inventory.leaves += Math.floor(Math.random() * 3) + 2;
         //startGame(world.maps[player.position.map].map);
         changeBlock(String(player.position.y) + String(player.position.x), {x : player.position.x, y : player.position.y});
+        buttoTest();
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone"){
+        world.maps[player.position.map].map[player.position.y][player.position.x] = "";
+        player.inventory.stone += Math.floor(Math.random()) + 1;
+        player.inventory.pebble += Math.floor(Math.random() * 2) + 2;
+        //startGame(world.maps[player.position.map].map);
+        changeBlock(String(player.position.y) + String(player.position.x), {x : player.position.x, y : player.position.y});
+        buttoTest();
     }
 }
 
@@ -182,6 +198,9 @@ function test(x,y){
     else if (world.maps[player.position.map].map[y][x] == "farm"){
         color = "brown";
     }
+    else if (world.maps[player.position.map].map[y][x] == "stone"){
+        color = "lightgray";
+    }
     else{
         color = "lightgreen";
     }
@@ -227,11 +246,48 @@ function everythingTime(){
     else if (world.time.hour == 20) {
         body.style.backgroundColor = "dimgray";
     }
+
+    //This is for testing purposes, this makes the map have nothing inside - I used if for testing respawning
+    /*
+    for (let i = 0; i < 11; i++){
+        let row = [];
+        for (let j = 0; j < 11; j++){
+            var mapPart;
+            mapPart = "";
+            row.push(mapPart);
+        }
+        world.maps[player.position.map].map[i] = row;
+    }
+    */
+    var many = Math.ceil(Math.random() * 4) + 1;
+
+    for (let i = 0; i < many; i++){
+        respawn();
+    }
+}
+
+function respawn(){
+    var element = Math.random()*2;
+    var mapPart;
+    if (element >= 1){
+        mapPart = "bush";
+    }
+    else if (element >= 0){
+        mapPart = "stone";
+    }
+
+    var num1 = Math.floor(Math.random() * 11);
+    var num2 = Math.floor(Math.random() * 11);
+    if (world.maps[player.position.map].map[num1][num2] == ""){
+        world.maps[player.position.map].map[num1][num2] = mapPart;
+        //console.log(num1, num2, mapPart);
+        startGame(world.maps[player.position.map].map);
+    }
 }
 
 var player = {
-    position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map5"},
-    inventory : {leaves : 0, sticks : 0},
+    position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
+    inventory : {leaves : 0, sticks : 0, stone : 0, pebble : 0},
 }
 
 var world = {
@@ -256,6 +312,9 @@ var world = {
     }
 }
 
+console.log(player.position.map)
+
 setInterval(everythingTime, 12500)
+//setInterval(everythingTime, 300) //for testing purposes when you need fast time
 
 startGame(world.maps[player.position.map].map);

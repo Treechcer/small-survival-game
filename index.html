@@ -32,8 +32,10 @@
             align-items: center;
             display: flex;
             text-align: center;
-            border: 2.5px, solid, black;
+            border: 2.5px solid black;
             border-radius: 7.5px;
+            box-shadow: 0 2px 5px black;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         .mainG {
@@ -49,10 +51,23 @@
             margin-top: 7px;
         }
 
-        p{
+        .buttons:hover{
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        button{
             font-size: 35px;
             cursor: pointer;
             user-select: none;
+            background: none;
+            border: none;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
         }
     </style>
 </head>
