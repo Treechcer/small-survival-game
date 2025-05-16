@@ -6,59 +6,55 @@ function startGame(map){
         var color;
         var line = '<div class="mainG">';
         for (let i = 0; i < map.length; i++){
-            if (player.position.y == y && player.position.x == i){
-                color = "orange";
-            }
-            else if (map[y][i] == "bush"){
-                color = "green";
-            }
-            else if(map[y][i] == "water"){
-                color = "DeepSkyBlue";
-            }
-            else if (map[y][i] == "nextMap"){
-                color = "red";
-            }
-            else if (map[y][i] == "farm"){
-                color = "brown";
-            }
-            else{
-                color = "lightgreen";
-            }
-            line += `<div> <div class="gameS" style="background-color:${color}"> </div> </div>`;
+            var color = test(i,y);
+            line += `<div> <div class="gameS" style="background-color:${color}" id="${i}${y}"> </div> </div>`;
         }
         line += "</div>";
 
         game.innerHTML += line;   
     }
 
+    game.innerHTML += '<div id="butts"> </div>'
+
+    buttoTest();
+}
+
+function buttoTest(){
     var bonusButtons = {mine: {}, build: {}};
     //console.log(player.position, map[player.position.y][player.position.x])
     var p0 = `<p> </p>`
     var p1 = `<p> </p>`
-    if (map[player.position.y][player.position.x] == "bush"){
+    if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
         bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🌲"}
         p0 = `<p ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </p>`
     }
-    else if (map[player.position.y][player.position.x] == ""){
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == ""){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
         p1 = `<p ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </p>`
     }
 
-    game.innerHTML += `<div style="display:flex;"> \
+    var button = document.getElementById("butts");
+    button.innerHTML = "";
+    button.innerHTML += `<div style="display:flex;"> \
     <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
-    <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,-1)">↑</p></div> \
+    <div id="top-mid" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,-1,)">↑</p></div> \
     <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
 </div>`;
-    game.innerHTML += `<div style="display:flex;"> \
+    button.innerHTML += `<div style="display:flex;"> \
     <div id="mid-left" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(-1,0)">←</p></div> \
     <div id="mid-mid" class="gameS" style="height:50px; width:50px; background-color:gray;"><p>≡</p></div> \
     <div id="mid-right" class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(1,0)">→</p></div> \
 </div>`;
-    game.innerHTML += `<div style="display:flex;"> \
+    button.innerHTML += `<div style="display:flex;"> \
     <div id="bot-left"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
     <div id="bot-mid"class="gameS" style="height:50px; width:50px; background-color:lightgray;"><p onclick="move(0,1)">↓</p></div> \
     <div id="bot-right"class="gameS" style="height:50px; width:50px; background-color:gray;"> <p> </p> </div> \
 </div>`;
+}
+
+function changeBlock(id, position){
+    var color = test(position.x, position.y);
+    document.getElementById(id).style.color = color;
 }
 
 function generateMap(exitT, exitB, exitL, exitR){ //these variables are true or false to disables exits
@@ -130,7 +126,8 @@ function chop(){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
         player.inventory.leaves += Math.floor(Math.random() * 3) + 2;
-        startGame(world.maps[player.position.map].map);
+        //startGame(world.maps[player.position.map].map);
+        changeBlock(String(player.position.y) + String(player.position.x), {x : player.position.x, y : player.position.y});
     }
 }
 
@@ -154,8 +151,38 @@ function move(x, y){
             player.position.map = "map" + (world.maps[player.position.map].num + 3);
             player.position.y = 1;
         }
-        startGame(world.maps[player.position.map].map);
+        else{
+            document.getElementById(String(player.position.x-x) + String(player.position.y-y)).style.backgroundColor = test(player.position.x-x, player.position.y-y);
+            document.getElementById(String(player.position.x) + String(player.position.y)).style.backgroundColor = test(player.position.x, player.position.y);
+        }
+
+        buttoTest();
     }
+}
+
+function test(x,y){
+    var color;
+
+    if (player.position.y == y && player.position.x == x){
+        color = "orange";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "bush"){
+        color = "green";
+    }
+    else if(world.maps[player.position.map].map[y][x] == "water"){
+        color = "DeepSkyBlue";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "nextMap"){
+        color = "red";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "farm"){
+        color = "brown";
+    }
+    else{
+        color = "lightgreen";
+    }
+
+    return color;
 }
 
 function everythingTime(){
