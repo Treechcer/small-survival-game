@@ -48,7 +48,9 @@ function buttoTest(){
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == ""){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
         p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
-        truthTable[1] = true;
+        if (player.inventory.sticks > 2 && player.inventory.leaves > 4){
+            truthTable[1] = true;
+        }
     }
 
     var button = document.getElementById("butts");
