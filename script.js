@@ -48,28 +48,53 @@ function buttoTest(){
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == ""){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
         p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
-        if (player.inventory.sticks > 2 && player.inventory.leaves > 4){
+        if (player.inventory.sticks > 2 && player.inventory.leafes > 4){
             truthTable[1] = true;
         }
     }
 
+    var inventory = makeInventory();
+
     var button = document.getElementById("butts");
     button.innerHTML = "";
-    button.innerHTML += `<div style="display:flex;"> \
-    <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
-    <div id="top-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(0,-1,)">↑</button></div> \
-    <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
-</div>`;
-    button.innerHTML += `<div style="display:flex;"> \
-    <div id="mid-left" class="gameS button" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(-1,0)">←</button></div> \
-    <div id="mid-mid" class="gameS button" style="height:50px; width:50px; background-color:gray;"><button>≡</button></div> \
-    <div id="mid-right" class="gameS button" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(1,0)">→</button></div> \
-</div>`;
-    button.innerHTML += `<div style="display:flex;"> \
-    <div id="bot-left"class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p2} </div> \
-    <div id="bot-mid"class="gameS buttons" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(0,1)">↓</button></div> \
-    <div id="bot-right"class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p3} </div> \
-</div>`;
+button.innerHTML = `
+  <div style="display: flex; gap: 10px;">
+    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+      <div style="display: flex;">
+        <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;">${p0}</div>
+        <div id="top-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
+          <button onclick="move(0,-1)">↑</button>
+        </div>
+        <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div>
+      </div>
+      <div style="display: flex;">
+        <div id="mid-left" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
+          <button onclick="move(-1,0)">←</button>
+        </div>
+        <div id="mid-mid" class="gameS button" style="height:50px; width:50px; background-color:gray;">
+          <button onclick="openMenu()">≡</button>
+        </div>
+        <div id="mid-right" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
+          <button onclick="move(1,0)">→</button>
+        </div>
+      </div>
+      <div style="display: flex;">
+        <div id="bot-left" class="gameS" style="height:50px; width:50px; background-color:gray;">${p2}</div>
+        <div id="bot-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
+          <button onclick="move(0,1)">↓</button>
+        </div>
+        <div id="bot-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p3}</div>
+      </div>
+    </div>
+
+    <div style=" border: 3px solid black; border-radius: 10px; display:flex; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+        ${inventory.first}
+        ${inventory.second}
+        ${inventory.third}
+    </div>
+  </div>
+`;
+
     
     var indexedIds = ["top-left", "top-right", "bot-left", "bot-right"]
     for (let i = 0; i < 4; i++){
@@ -79,6 +104,37 @@ function buttoTest(){
             el.classList.add("button")
         }
     }
+}
+
+function makeInventory(){
+    /*
+    inspiration on how to make it, because I wrote similar code:
+
+    <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
+    <div id="top-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(0,-1,)">↑</button></div> \
+    <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
+
+    */
+
+var inv = {
+  first: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray;">🪵: ${player.inventory.sticks}</div>
+            <div class="inv" style="background-color:gray;">🍃: ${player.inventory.leafes}</div>
+            <div class="inv" style="background-color:gray;">🪨: ${player.inventory.pebble}</div>
+          </div>`,
+  second: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray;">💧: ${player.inventory.watter}</div>
+            <div class="inv" style="background-color:gray;">🧵: ${player.inventory.fiber}</div>
+            <div class="inv" style="background-color:gray;">⛰️: ${player.inventory.stone}</div>
+           </div>`,
+  third: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray; ">🫐: ${player.inventory.berries}</div>
+            <div class="inv" style="background-color:gray;">🌾: ${player.inventory.wheat}</div>
+            <div class="inv" style="background-color:gray;">🍞: ${player.inventory.bread}</div>
+          </div>`
+};
+
+    return inv;
 }
 
 function changeBlock(id, position){
@@ -129,7 +185,7 @@ function generateMap(exitT, exitB, exitL, exitR){ //these variables are true or 
 function build(building){
     // TODO: make the building work, hopefully add more things? maybe upgrades? maybe other things? farms?
 
-    if (building == "farm" && player.inventory.sticks >= 3 && player.inventory.leaves >= 5){
+    if (building == "farm" && player.inventory.sticks >= 3 && player.inventory.leafes >= 5){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "farm";
         world.farms["farm" + world.farms.increasingNum] = {
             pos : {
@@ -148,7 +204,7 @@ function build(building){
 
         world.farms.increasingNum++;
         player.inventory.sticks -= 3;
-        player.inventory.leaves -= 5;
+        player.inventory.leafes -= 5;
         console.log(world.farms);
     }
 
@@ -159,7 +215,7 @@ function chop(){
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
-        player.inventory.leaves += Math.floor(Math.random() * 3) + 2;
+        player.inventory.leafes += Math.floor(Math.random() * 3) + 2;
         //startGame(world.maps[player.position.map].map);
         changeBlock(String(player.position.y) + String(player.position.x), {x : player.position.x, y : player.position.y});
         buttoTest();
@@ -345,7 +401,7 @@ function respawn(){
 
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
-    inventory : {leaves : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0},
+    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0},
 }
 
 var world = {
