@@ -106,6 +106,17 @@ button.innerHTML = `
     }
 }
 
+function changePage(isRight){
+    if (!isRight){
+        player.page--;
+    }
+    else if (isRight){
+        player.page++;
+    }
+
+    buttoTest();
+}
+
 function makeInventory(){
     /*
     inspiration on how to make it, because I wrote similar code:
@@ -115,23 +126,56 @@ function makeInventory(){
     <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
 
     */
+    var page = [];
+    var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
 
-var inv = {
-  first: `<div style="display: flex; flex-direction: column;">
-            <div class="inv" style="background-color:gray;">🪵: ${player.inventory.sticks}</div>
-            <div class="inv" style="background-color:gray;">🍃: ${player.inventory.leafes}</div>
-            <div class="inv" style="background-color:gray;">🪨: ${player.inventory.pebble}</div>
-          </div>`,
-  second: `<div style="display: flex; flex-direction: column;">
-            <div class="inv" style="background-color:gray;">💧: ${player.inventory.watter}</div>
-            <div class="inv" style="background-color:gray;">🧵: ${player.inventory.fiber}</div>
-            <div class="inv" style="background-color:gray;">⛰️: ${player.inventory.stone}</div>
-           </div>`,
-  third: `<div style="display: flex; flex-direction: column;">
-            <div class="inv" style="background-color:gray; ">🫐: ${player.inventory.berries}</div>
-            <div class="inv" style="background-color:gray;">🌾: ${player.inventory.wheat}</div>
-            <div class="inv" style="background-color:gray;">🍞: ${player.inventory.bread}</div>
-          </div>`
+    if (player.page == 0){
+        page[0] = `🪵: ${player.inventory.sticks}`
+        page[1] = `🍃: ${player.inventory.leafes}`
+        page[2] = `🪨: ${player.inventory.pebble}`
+        page[3] = `💧: ${player.inventory.watter}`
+        page[4] = `🧵: ${player.inventory.fiber}`
+        page[5] = `⛰️: ${player.inventory.stone}`
+        page[6] = `🫐: ${player.inventory.berries}`
+        on.button1.HTMLatribute = "disabled";
+        on.button1.class = "dis";
+
+        on.button2.HTMLatribute = "";
+        on.button2.class = "button";
+    }
+    else if (player.page == 1){
+        page[0] = `🍞: ${player.inventory.bread}`
+        page[1] = `🌾: ${player.inventory.wheat}`
+        page[2] = ``
+        page[3] = ``
+        page[4] = ``
+        page[5] = ``
+        page[6] = ``
+
+        on.button2.HTMLatribute = "disabled";
+        on.button2.class = "dis";
+
+        on.button1.HTMLatribute = "";
+        on.button1.class = "button";
+    }
+
+
+    var inv = {
+    first: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray;"> ${page[0]} </div>
+            <div class="inv ${on.button1.class}" style="background-color:gray;"> <button onclick="${on.button1.func}" class="${on.button1.class}" ${on.button1.HTMLatribute}> ← </button> </div>
+            <div class="inv" style="background-color:gray;"> ${page[1]} </div>
+    </div>`,
+    second: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray;"> ${page[2]} </div>
+            <div class="inv" style="background-color:gray;"> ${page[3]} </div>
+            <div class="inv" style="background-color:gray;"> ${page[4]}</div>
+    </div>`,
+    third: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray; "> ${page[5]} </div>
+            <div class="inv ${on.button2.class}" style="background-color:gray;"> <button onclick="${on.button2.func}" class="${on.button2.class}" ${on.button2.HTMLatribute}> → </button> </div>
+            <div class="inv" style="background-color:gray;"> ${page[6]} </div>
+    </div>`
 };
 
     return inv;
@@ -402,6 +446,7 @@ function respawn(){
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
     inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0},
+    page : 0,
 }
 
 var world = {
