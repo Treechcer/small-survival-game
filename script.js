@@ -19,6 +19,15 @@ function startGame(map){
     buttoTest();
 }
 
+function redrawBoard(){
+    var map = world.maps[player.position.map].map;
+    for (let y = 0; y < map.length; y++){
+        for (let i = 0; i < map.length; i++){
+            changeBlock({x : y, y : i});   
+        }
+    }
+}
+
 function buttoTest(){
     var bonusButtons = {mine: {}, build: {}};
     //console.log(player.position, map[player.position.y][player.position.x])
@@ -181,9 +190,10 @@ function makeInventory(){
     return inv;
 }
 
-function changeBlock(id, position){
+function changeBlock(position){
+    var id = String(position.x) + String(position.y);
     var color = test(position.x, position.y);
-    document.getElementById(id).style.color = color;
+    document.getElementById(id).style.backgroundColor = color;
 }
 
 function generateMap(exitT, exitB, exitL, exitR){ //these variables are true or false to disables exits
@@ -249,7 +259,7 @@ function build(building){
         world.farms.increasingNum++;
         player.inventory.sticks -= 3;
         player.inventory.leafes -= 5;
-        console.log(world.farms);
+        //console.log(world.farms);
     }
 
     buttoTest();
@@ -261,7 +271,7 @@ function chop(){
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
         player.inventory.leafes += Math.floor(Math.random() * 3) + 2;
         //startGame(world.maps[player.position.map].map);
-        changeBlock(String(player.position.y) + String(player.position.x), {x : player.position.x, y : player.position.y});
+        changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone"){
@@ -269,14 +279,14 @@ function chop(){
         player.inventory.stone += Math.floor(Math.random()) + 1;
         player.inventory.pebble += Math.floor(Math.random() * 2) + 2;
         //startGame(world.maps[player.position.map].map);
-        changeBlock(String(player.position.y) + String(player.position.x), {x : player.position.x, y : player.position.y});
+        changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "finishedFarm"){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
         player.inventory.wheat += Math.ceil(Math.random() * 3) + 1;
         //startGame(world.maps[player.position.map].map);
-        changeBlock(String(player.position.y) + String(player.position.x), {x : player.position.x, y : player.position.y});
+        changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
 
@@ -290,22 +300,26 @@ function move(x, y){
         if (player.position.x == 0 && player.position.y == 5 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num - 1);
             player.position.x = 9;
-            startGame(world.maps[player.position.map].map);
+            //startGame(world.maps[player.position.map].map);
+            redrawBoard();
         }
         else if (player.position.x == 10 && player.position.y == 5 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num + 1);
             player.position.x = 1;
-            startGame(world.maps[player.position.map].map);
+            //startGame(world.maps[player.position.map].map);
+            redrawBoard()
         }
         else if (player.position.x == 5 && player.position.y == 0 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num - 3);
             player.position.y = 9;
-            startGame(world.maps[player.position.map].map);
+            //startGame(world.maps[player.position.map].map);
+            redrawBoard()
         }
         else if (player.position.x == 5 && player.position.y == 10 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num + 3);
             player.position.y = 1;
-            startGame(world.maps[player.position.map].map);
+            //startGame(world.maps[player.position.map].map);
+            redrawBoard()
         }
         else{
             document.getElementById(String(player.position.x-x) + String(player.position.y-y)).style.backgroundColor = test(player.position.x-x, player.position.y-y);
@@ -416,7 +430,7 @@ function everythingTime(){
 
             if (world.farms[farm].phase == 5){
                 world.maps[world.farms[farm].pos.map].map[world.farms[farm].pos.posY][world.farms[farm].pos.posX] = "finishedFarm";
-                changeBlock(String(world.farms[farm].pos.posX) + String(world.farms[farm].pos.posY), {x: world.farms[farm].pos.posX, y : world.farms[farm].pos.posY})
+                changeBlock({x: world.farms[farm].pos.posX, y : world.farms[farm].pos.posY})
             }
 
              world.farms[farm].time.timer++;
@@ -439,7 +453,9 @@ function respawn(){
     if (world.maps[player.position.map].map[num1][num2] == ""){
         world.maps[player.position.map].map[num1][num2] = mapPart;
         //console.log(num1, num2, mapPart);
-        startGame(world.maps[player.position.map].map);
+        //startGame(world.maps[player.position.map].map);
+        changeBlock({x: num2,y: num1})
+        //console.log(String(num2) , String(num1))
     }
 }
 
