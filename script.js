@@ -294,9 +294,19 @@ function chop(){
 }
 
 function move(x, y){
-    if (!(player.position.x + x <= -1 || player.position.x + x >= 11) && !(player.position.y + y <= -1 || player.position.y + y >= 11)){
+
+    function movinator3000(){
+        player.move.canMove = true;
+        clearInterval(player.move.intervalID);
+    }
+
+    if (!(player.position.x + x <= -1 || player.position.x + x >= 11) && !(player.position.y + y <= -1 || player.position.y + y >= 11) && player.move.canMove){
         player.position.x += x;
         player.position.y += y;
+
+        player.move.canMove = false;
+        player.move.intervalID = setInterval(movinator3000, 175);
+
         if (player.position.x == 0 && player.position.y == 5 && world.maps[player.position.map].map[player.position.y][player.position.x] == "nextMap"){
             player.position.map = "map" + (world.maps[player.position.map].num - 1);
             player.position.x = 9;
@@ -459,10 +469,26 @@ function respawn(){
     }
 }
 
+document.addEventListener('keydown', function(event) {
+    if (event.key == "w" || event.key == "ArrowUp"){
+        move(0,-1);
+    }
+    else if (event.key == "s" || event.key == "ArrowDown"){
+        move(0,1);
+    }
+    else if (event.key == "a" || event.key == "ArrowRight"){
+        move(-1,0);
+    }
+    else if (event.key == "d" || event.key == "ArrowLeft"){
+        move(1,0);
+    }
+});
+
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
     inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0},
     page : 0,
+    move : {canMove : true, intervalID : "n"}
 }
 
 var world = {
