@@ -134,6 +134,9 @@ function changePage(isRight){
 }
 
 function makeCraftring(){
+    
+    //TODO: Make this actually work and not just inventroy 2 lmao
+
     var page = [];
     var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
 
