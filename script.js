@@ -1,19 +1,19 @@
 function startGame(map){
     const game = document.getElementById("game");
     game.innerHTML = "";
+    var line = `<div id="gameWrap">`;
 
     for (let y = 0; y < map.length; y++){
-        var color;
-        var line = '<div class="mainG">';
+        line += '<div class="mainG">';
         for (let i = 0; i < map.length; i++){
             var color = test(i,y);
             line += `<div> <div class="gameS" style="background-color:${color}" id="${i}${y}"> </div> </div>`;
         }
         line += "</div>";
-
-        game.innerHTML += line;   
+ 
     }
-
+    line += "</div>";
+    game.innerHTML = line; 
     game.innerHTML += '<div id="butts"> </div>'
 
     buttoTest();
@@ -63,11 +63,18 @@ function buttoTest(){
     }
 
     var inventory = makeInventory();
+    var crafting = makeCraftring();
 
     var button = document.getElementById("butts");
     button.innerHTML = "";
-button.innerHTML = `
+
+    button.innerHTML = `
   <div style="display: flex; gap: 10px;">
+    <div style=" border: 3px solid black; border-radius: 10px; display:flex; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+        ${inventory.first}
+        ${inventory.second}
+        ${inventory.third}
+    </div>
     <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
       <div style="display: flex;">
         <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;">${p0}</div>
@@ -126,19 +133,11 @@ function changePage(isRight){
     buttoTest();
 }
 
-function makeInventory(){
-    /*
-    inspiration on how to make it, because I wrote similar code:
-
-    <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
-    <div id="top-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(0,-1,)">↑</button></div> \
-    <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
-
-    */
+function makeCraftring(){
     var page = [];
     var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
 
-    if (player.page == 0){
+    if (player.UI.CraftPage == 0){
         page[0] = `🪵: ${player.inventory.sticks}`
         page[1] = `🍃: ${player.inventory.leafes}`
         page[2] = `🪨: ${player.inventory.pebble}`
@@ -152,7 +151,50 @@ function makeInventory(){
         on.button2.HTMLatribute = "";
         on.button2.class = "button";
     }
-    else if (player.page == 1){
+    else if (player.UI.CraftPage == 1){
+        page[0] = `🍞: ${player.inventory.bread}`
+        page[1] = `🌾: ${player.inventory.wheat}`
+        page[2] = ``
+        page[3] = ``
+        page[4] = ``
+        page[5] = ``
+        page[6] = ``
+
+        on.button2.HTMLatribute = "disabled";
+        on.button2.class = "dis";
+
+        on.button1.HTMLatribute = "";
+        on.button1.class = "button";
+    }
+}
+
+function makeInventory(){
+    /*
+    inspiration on how to make it, because I wrote similar code:
+
+    <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;"> ${p0} </div> \
+    <div id="top-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;"><button onclick="move(0,-1,)">↑</button></div> \
+    <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div> \
+
+    */
+    var page = [];
+    var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
+
+    if (player.UI.InvPage == 0){
+        page[0] = `🪵: ${player.inventory.sticks}`
+        page[1] = `🍃: ${player.inventory.leafes}`
+        page[2] = `🪨: ${player.inventory.pebble}`
+        page[3] = `💧: ${player.inventory.watter}`
+        page[4] = `🧵: ${player.inventory.fiber}`
+        page[5] = `⛰️: ${player.inventory.stone}`
+        page[6] = `🫐: ${player.inventory.berries}`
+        on.button1.HTMLatribute = "disabled";
+        on.button1.class = "dis";
+
+        on.button2.HTMLatribute = "";
+        on.button2.class = "button";
+    }
+    else if (player.UI.InvPage == 1){
         page[0] = `🍞: ${player.inventory.bread}`
         page[1] = `🌾: ${player.inventory.wheat}`
         page[2] = ``
@@ -487,7 +529,7 @@ document.addEventListener('keydown', function(event) {
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
     inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0},
-    page : 0,
+    UI : {InvPage : 0, CraftPage : 0},
     move : {canMove : true, intervalID : "n"}
 }
 
