@@ -521,10 +521,10 @@ document.addEventListener('keydown', function(event) {
     else if (event.key == "s" || event.key == "ArrowDown"){
         move(0,1);
     }
-    else if (event.key == "a" || event.key == "ArrowRight"){
+    else if (event.key == "a" || event.key == "ArrowLeft"){
         move(-1,0);
     }
-    else if (event.key == "d" || event.key == "ArrowLeft"){
+    else if (event.key == "d" || event.key == "ArrowRight"){
         move(1,0);
     }
 });
