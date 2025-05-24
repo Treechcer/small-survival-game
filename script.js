@@ -71,9 +71,9 @@ function buttoTest(){
     button.innerHTML = `
   <div style="display: flex; gap: 10px;">
     <div style=" border: 3px solid black; border-radius: 10px; display:flex; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
-        ${inventory.first}
-        ${inventory.second}
-        ${inventory.third}
+        ${crafting.first}
+        ${crafting.second}
+        ${crafting.third}
     </div>
     <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
       <div style="display: flex;">
@@ -133,35 +133,79 @@ function changePage(isRight){
     buttoTest();
 }
 
-function makeCraftring(){
-    
+function craftControl(page){
+
+    // TODO need to fix it maybe? Idk if it works correctly and I'm lazy and tired now so gn :3
+
+    var craftableThings = [];
+
+    for (let obj in page){
+        var isCraftable = true;
+        for (let material in page[obj]){
+            if (material == "emoji"){
+                continue;
+            }
+            console.log(material);
+            console.log(material, page[obj][material]);
+
+            if (!(page[obj][material] <= player.inventory[material])){
+                isCraftable = false;
+                break
+            }
+
+            //console.log(crafting[obj][material] <= player.inventory[material])
+            console.log(page[obj][material], player.inventory[material])
+        }
+
+        if (isCraftable){
+            craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji});
+        }
+    }
+
+    return craftableThings;
+}
+
+function makeCraftring(){    
     //TODO: Make this actually work and not just inventroy 2 lmao
+
+    /*
+    PAGES IDEA
+
+    page0 : pickaxe, axe, fishing rod ... - all upgradable 
+
+    page1 : fiber - no idea how to craft it for now, bread - wheat + watter + ???, bucket - for watter gathering, ...
+
+    page2 : coal or some kind of thing to burn in furnace to cook bread + fishes ...
+    
+    */
+
+    //checking for valid crafting recipes
+
+    var craftable = craftControl(crafting[player.UI.CraftPage]);
+
+    //console.log(craftable);
 
     var page = [];
     var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
 
-    if (player.UI.CraftPage == 0){
-        page[0] = `🪵: ${player.inventory.sticks}`
-        page[1] = `🍃: ${player.inventory.leafes}`
-        page[2] = `🪨: ${player.inventory.pebble}`
-        page[3] = `💧: ${player.inventory.watter}`
-        page[4] = `🧵: ${player.inventory.fiber}`
-        page[5] = `⛰️: ${player.inventory.stone}`
-        page[6] = `🫐: ${player.inventory.berries}`
+    if (player.UI.CraftPage == "page0"){
+        page[0] = `${craftable}`
+        page[1] = `${craftable}`
+        page[2] = `${craftable}`
+        page[3] = ``
+        page[4] = ``
+        page[5] = ``
+        page[6] = ``
+
+        // No idea what I wa cooking ngl but whatever, I need to fix it soon (???) - SAIFISAFBHSADLSAHFKAJ
+
         on.button1.HTMLatribute = "disabled";
         on.button1.class = "dis";
 
         on.button2.HTMLatribute = "";
         on.button2.class = "button";
     }
-    else if (player.UI.CraftPage == 1){
-        page[0] = `🍞: ${player.inventory.bread}`
-        page[1] = `🌾: ${player.inventory.wheat}`
-        page[2] = ``
-        page[3] = ``
-        page[4] = ``
-        page[5] = ``
-        page[6] = ``
+    else if (player.UI.CraftPage == "page1"){
 
         on.button2.HTMLatribute = "disabled";
         on.button2.class = "dis";
@@ -169,6 +213,26 @@ function makeCraftring(){
         on.button1.HTMLatribute = "";
         on.button1.class = "button";
     }
+
+        var craft = {
+    first: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray;"> ${page[0]} </div>
+            <div class="inv ${on.button1.class}" style="background-color:gray;"> <button onclick="${on.button1.func}" class="${on.button1.class}" ${on.button1.HTMLatribute}> ← </button> </div>
+            <div class="inv" style="background-color:gray;"> ${page[1]} </div>
+    </div>`,
+    second: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray;"> ${page[2]} </div>
+            <div class="inv" style="background-color:gray;"> ${page[3]} </div>
+            <div class="inv" style="background-color:gray;"> ${page[4]}</div>
+    </div>`,
+    third: `<div style="display: flex; flex-direction: column;">
+            <div class="inv" style="background-color:gray; "> ${page[5]} </div>
+            <div class="inv ${on.button2.class}" style="background-color:gray;"> <button onclick="${on.button2.func}" class="${on.button2.class}" ${on.button2.HTMLatribute}> → </button> </div>
+            <div class="inv" style="background-color:gray;"> ${page[6]} </div>
+    </div>`
+    };
+
+    return craft;
 }
 
 function makeInventory(){
@@ -315,6 +379,7 @@ function chop(){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
         player.inventory.leafes += Math.floor(Math.random() * 3) + 2;
+        player.inventory.fiber += Math.floor(Math.random() * 3);
         //startGame(world.maps[player.position.map].map);
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
@@ -529,10 +594,36 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+var crafting = {
+    page0 : { //not yet upgradable... Will see how I'll make it upgradable tho I have no idea how.. Maybe updating the object
+              //like "crafting.page0.axe.sticks += 10" or something? But how will I add more materials??? Maybe I'll need to start
+              //with "ghost" materials - starting at 0? || maybe updateing the whole object? That would be kinda brute force, woulnd't it?
+              //like "crafting.page0.axe = {sticks : 25, ironBar : 25, fiber : 10}" or something, but that seems like harder way? idk we'll see
+              
+              //this crazy ramble is like 80% of all comments xD kinda sad ngl
+
+        fishingRod : {emoji : "🎣", sticks : 20, fiber : 15},
+        pickaxe : {emoji : "⛏️", sticks : 25, stone : 15, pebble : 25},
+        axe : {emoji : "🪓", sticks : 20, stone : 10, pebble : 25, leafes : 10}
+    },
+
+    page1 : {
+        bread : {emoji : "🍞", wheat : 10, watter : 10},
+        bucket : {emoji : "🪣", likeIdkNowBecauseIdontThinkAboutItMuchBecauseWhyCareAboutBallanceWhenIcanDoShittyStuffThatDoensTmakeAnySense : 50}
+    },
+
+    page2 : { //unfinished
+        coal : {emoji : "⚫"}
+    }
+}
+
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
-    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0},
-    UI : {InvPage : 0, CraftPage : 0},
+    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0, smallFish : 0, bigFish : 0},
+    
+    // FISHes are not yet added into inventory
+
+    UI : {InvPage : 0, CraftPage : "page0"},
     move : {canMove : true, intervalID : "n"}
 }
 
