@@ -53,6 +53,11 @@ function buttoTest(){
         p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
         truthTable[0] = true;
     }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
+        bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🐟"}
+        p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
+        truthTable[0] = true;
+    }
     
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == ""){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
@@ -153,13 +158,14 @@ function craftControl(page){
     for (let obj in page){
         var isCraftable = true;
         for (let material in page[obj]){
-            if (material == "emoji"){
+            if (material == "emoji" || material == "uses" || material == "type"){
                 continue;
             }
             console.log(material);
             console.log(material, page[obj][material]);
 
             if (!(page[obj][material] <= player.inventory[material])){
+                console.log(page[obj][material], player.inventory[material])
                 isCraftable = false;
                 break
             }
@@ -168,12 +174,7 @@ function craftControl(page){
             console.log(page[obj][material], player.inventory[material])
         }
         
-        if (isCraftable){
-            craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji, isCraftable : true});
-        }
-        else{
-            craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji, isCraftable : false});
-        }
+        craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji, isCraftable : isCraftable, name : obj});
     }
 
     console.log(craftableThings);
@@ -204,24 +205,24 @@ function makeCraftring(){
     var page = [];
     var on = {button1: {class: "", HTMLatribute : "", func : "changePageCrafting(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePageCrafting(true)"}}
 
-    if (player.UI.CraftPage == "page0"){
-        crafting.activeRecipes = craftable;
+    crafting.activeRecipes = craftable;
 
+    if (player.UI.CraftPage == "page0"){
         /*
         console.log(craftable)
         console.log(craftable[0])
         console.log(craftable[0].fishingRod)
         */
-
-        craftable[0].isCraftable ? page[0] = `<button onclick="craftThing(crafting.activeRecipes[0])"> ${craftable[0].emoji} </button>` : page[0] = ``;
-        craftable[1].isCraftable ? page[1] = `${craftable[1].emoji}` : page[1] = ``;
-        craftable[2].isCraftable ? page[2] = `${craftable[2].emoji}` : page[2] = ``;
+        for (let i = 0; i < 3; i ++){
+            craftable[i].isCraftable ? page[i] = `<button onclick="craftThing(crafting.activeRecipes[${i}])"> ${craftable[i].emoji} </button>` : page[i] = ``;
+        }
         page[3] = ``
         page[4] = ``
         page[5] = ``
         page[6] = ``
 
         // This code acces objects from Array "craftable", because I've made from 0-6 
+        //Fun fact: it's bad code and you NEED to make pages that exist, because if you don't make them at least equal "" it'll show undefined
 
         on.button1.HTMLatribute = "disabled";
         on.button1.class = "dis";
@@ -231,9 +232,9 @@ function makeCraftring(){
     }
     else if (player.UI.CraftPage == "page1"){
 
-        page[0] = `${craftable}`
-        page[1] = `${craftable}`
-        page[2] = `${craftable}`
+        for (let i = 0; i < 3; i ++){
+            craftable[i].isCraftable ? page[i] = `<button onclick="craftThing(crafting.activeRecipes[${i}])"> ${craftable[i].emoji} </button>` : page[i] = ``;
+        }
         page[3] = ``
         page[4] = ``
         page[5] = ``
@@ -269,8 +270,29 @@ function makeCraftring(){
 
 function craftThing(thing){
     console.log(thing);
+    //console.log(thing[thing.name])
+    //console.log(player.inventory)
 
-    //TODO make the crafting really work, I'm too lazy to fnish this messy bad code :3
+    for (key in thing[thing.name]){
+        if (key == "emoji" || key == "name" || key == "type" || key == "uses"){
+            continue
+        }
+        player.inventory[key] -= thing[thing.name][key];
+        console.log(player.inventory[key], thing[thing.name][key], key, thing[thing.name])
+
+    }
+
+    if (thing[thing.name].type == "tool"){
+        player.tools[thing.name].uses = thing[thing.name].uses
+        //console.log("something")
+    }
+    else if (thing[thing.name].type == "inventory"){
+        player.inventory[thing.name]++;
+    }
+
+    //console.log(player.inventory)
+
+    buttoTest();
 }
 
 function makeInventory(){
@@ -302,10 +324,10 @@ function makeInventory(){
     else if (player.UI.InvPage == 1){
         page[0] = `🍞: ${player.inventory.bread}`
         page[1] = `🌾: ${player.inventory.wheat}`
-        page[2] = ``
-        page[3] = ``
-        page[4] = ``
-        page[5] = ``
+        page[2] = `🍤: ${player.inventory.smallFish}`
+        page[3] = `🐟: ${player.inventory.bigFish}`
+        page[4] = `⚫: ${player.inventory.coal}`
+        page[5] = `🪣: ${player.inventory.bucket}`
         page[6] = ``
 
         on.button2.HTMLatribute = "disabled";
@@ -437,8 +459,25 @@ function chop(){
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
+        player.tools.fishingRod.uses--;
+        var rand = Math.random();
+        if (rand > 0.8){
+            player.inventory.bigFish++
+        }
+        else if(rand > 0.5){
+            player.inventory.smallFish += Math.ceil(Math.random() * 4)
+        }
 
-    console.log(player.inventory);
+        /*
+        console.log("FISHING!!!!");
+        console.log(player.inventory);
+        */
+    }
+
+    //console.log(player.inventory);
+
+    buttoTest()
 }
 
 function move(x, y){
@@ -640,19 +679,19 @@ var crafting = {
               
               //this crazy ramble is like 80% of all comments xD kinda sad ngl
 
-        // fishingRod : {emoji : "🎣", sticks : 20, fiber : 15}, //normal crafting recipe
-        fishingRod : {emoji : "🎣", sticks : 1, fiber : 1}, //test crafting recipe
-        pickaxe : {emoji : "⛏️", sticks : 25, stone : 15, pebble : 25},
-        axe : {emoji : "🪓", sticks : 20, stone : 10, pebble : 25, leafes : 10}
+        fishingRod : {emoji : "🎣", sticks : 20, fiber : 15, uses : 5, type : "tool"}, //test crafting recipe
+        pickaxe : {emoji : "⛏️", sticks : 25, stone : 15, pebble : 25, uses : 5, type : "tool"},
+        axe : {emoji : "🪓", sticks : 20, stone : 10, pebble : 25, leafes : 10, uses : 5, type : "tool"}
     },
 
     page1 : {
-        bread : {emoji : "🍞", wheat : 10, watter : 10},
-        bucket : {emoji : "🪣", likeIdkNowBecauseIdontThinkAboutItMuchBecauseWhyCareAboutBallanceWhenIcanDoShittyStuffThatDoensTmakeAnySense : 50}
+        bread : {emoji : "🍞", wheat : 10, watter : 10, type : "inventory"},
+        bucket : {emoji : "🪣", sticks : 50, type : "inventory"},
+        coal : {emoji : "⚫", sticks : 10, type : "inventory"}
     },
 
     page2 : { //unfinished
-        coal : {emoji : "⚫"}
+        
     },
 
 
@@ -665,12 +704,14 @@ var crafting = {
 
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
-    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0, smallFish : 0, bigFish : 0},
+    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0, 
+        smallFish : 0, bigFish : 0, coal : 0, bucket : 0,},
     
     // FISHes are not yet added into inventory
 
     UI : {InvPage : 0, CraftPage : "page0"},
-    move : {canMove : true, intervalID : "n"}
+    move : {canMove : true, intervalID : "n"},
+    tools : {fishingRod : {uses : 0}, pickaxe : {uses : 0}, axe : {uses : 0}} //here are added tools as "inventory" and their usage and other metadata needed
 }
 
 var world = {
