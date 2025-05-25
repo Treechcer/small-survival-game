@@ -124,10 +124,21 @@ function buttoTest(){
 
 function changePage(isRight){
     if (!isRight){
-        player.page--;
+        player.UI.InvPage--;
     }
     else if (isRight){
-        player.page++;
+        player.UI.InvPage++;
+    }
+
+    buttoTest();
+}
+
+function changePageCrafting(isRight){
+    if (!isRight){
+        player.UI.CraftPage = "page" + --player.UI.CraftPage[player.UI.CraftPage.length-1];
+    }
+    else if (isRight){
+        player.UI.CraftPage = "page" + ++player.UI.CraftPage[player.UI.CraftPage.length-1];
     }
 
     buttoTest();
@@ -156,11 +167,16 @@ function craftControl(page){
             //console.log(crafting[obj][material] <= player.inventory[material])
             console.log(page[obj][material], player.inventory[material])
         }
-
+        
         if (isCraftable){
-            craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji});
+            craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji, isCraftable : true});
+        }
+        else{
+            craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji, isCraftable : false});
         }
     }
+
+    console.log(craftableThings);
 
     return craftableThings;
 }
@@ -186,18 +202,26 @@ function makeCraftring(){
     //console.log(craftable);
 
     var page = [];
-    var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
+    var on = {button1: {class: "", HTMLatribute : "", func : "changePageCrafting(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePageCrafting(true)"}}
 
     if (player.UI.CraftPage == "page0"){
-        page[0] = `${craftable}`
-        page[1] = `${craftable}`
-        page[2] = `${craftable}`
+        crafting.activeRecipes = craftable;
+
+        /*
+        console.log(craftable)
+        console.log(craftable[0])
+        console.log(craftable[0].fishingRod)
+        */
+
+        craftable[0].isCraftable ? page[0] = `<button onclick="craftThing(crafting.activeRecipes[0])"> ${craftable[0].emoji} </button>` : page[0] = ``;
+        craftable[1].isCraftable ? page[1] = `${craftable[1].emoji}` : page[1] = ``;
+        craftable[2].isCraftable ? page[2] = `${craftable[2].emoji}` : page[2] = ``;
         page[3] = ``
         page[4] = ``
         page[5] = ``
         page[6] = ``
 
-        // No idea what I wa cooking ngl but whatever, I need to fix it soon (???) - SAIFISAFBHSADLSAHFKAJ
+        // This code acces objects from Array "craftable", because I've made from 0-6 
 
         on.button1.HTMLatribute = "disabled";
         on.button1.class = "dis";
@@ -206,6 +230,14 @@ function makeCraftring(){
         on.button2.class = "button";
     }
     else if (player.UI.CraftPage == "page1"){
+
+        page[0] = `${craftable}`
+        page[1] = `${craftable}`
+        page[2] = `${craftable}`
+        page[3] = ``
+        page[4] = ``
+        page[5] = ``
+        page[6] = ``
 
         on.button2.HTMLatribute = "disabled";
         on.button2.class = "dis";
@@ -233,6 +265,12 @@ function makeCraftring(){
     };
 
     return craft;
+}
+
+function craftThing(thing){
+    console.log(thing);
+
+    //TODO make the crafting really work, I'm too lazy to fnish this messy bad code :3
 }
 
 function makeInventory(){
@@ -379,7 +417,7 @@ function chop(){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
         player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
         player.inventory.leafes += Math.floor(Math.random() * 3) + 2;
-        player.inventory.fiber += Math.floor(Math.random() * 3);
+        player.inventory.fiber += Math.floor(Math.random() * 2);
         //startGame(world.maps[player.position.map].map);
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
@@ -602,7 +640,8 @@ var crafting = {
               
               //this crazy ramble is like 80% of all comments xD kinda sad ngl
 
-        fishingRod : {emoji : "🎣", sticks : 20, fiber : 15},
+        // fishingRod : {emoji : "🎣", sticks : 20, fiber : 15}, //normal crafting recipe
+        fishingRod : {emoji : "🎣", sticks : 1, fiber : 1}, //test crafting recipe
         pickaxe : {emoji : "⛏️", sticks : 25, stone : 15, pebble : 25},
         axe : {emoji : "🪓", sticks : 20, stone : 10, pebble : 25, leafes : 10}
     },
@@ -614,7 +653,14 @@ var crafting = {
 
     page2 : { //unfinished
         coal : {emoji : "⚫"}
-    }
+    },
+
+
+
+
+
+
+    activeRecipes : []
 }
 
 var player = {
