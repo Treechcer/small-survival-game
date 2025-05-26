@@ -739,12 +739,7 @@ var crafting = {
     page2 : { //unfinished
         
     },
-
-
-
-
-
-
+    
     activeRecipes : []
 }
 
