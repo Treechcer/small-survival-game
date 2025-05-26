@@ -29,7 +29,7 @@ function redrawBoard(){
 }
 
 function buttoTest(){
-    var bonusButtons = {mine: {}, build: {}};
+    var bonusButtons = {mine: {}, build: {}, tools: {}, items: {}};
     //console.log(player.position, map[player.position.y][player.position.x])
     var p0 = `<button style="cursor:default"> </button>`;
     var p1 = p0;
@@ -53,11 +53,6 @@ function buttoTest(){
         p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
         truthTable[0] = true;
     }
-    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
-        bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🐟"}
-        p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
-        truthTable[0] = true;
-    }
     
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == ""){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
@@ -65,6 +60,18 @@ function buttoTest(){
         if (player.inventory.sticks > 2 && player.inventory.leafes > 4){
             truthTable[1] = true;
         }
+    }
+
+    if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
+        bonusButtons.tools = {action: 'onclick="chop()"', buttonIcon : "🐟"}
+        p2 = `<button ${bonusButtons.tools.action}> ${bonusButtons.tools.buttonIcon} </button>`
+        truthTable[2] = true;
+    }
+
+    if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.inventory.bucket >= 1){
+        bonusButtons.items = {action: 'onclick="chop()"', buttonIcon : "🔵"}
+        p3 = `<button ${bonusButtons.items.action}> ${bonusButtons.items.buttonIcon} </button>`
+        truthTable[3] = true;
     }
 
     var inventory = makeInventory();
@@ -474,6 +481,10 @@ function chop(){
         console.log(player.inventory);
         */
     }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.inventory.bucket >= 1){
+        player.inventory.bucket--;
+        player.inventory.watter++;
+    }
 
     //console.log(player.inventory);
 
@@ -647,7 +658,12 @@ function respawn(){
 
     var num1 = Math.floor(Math.random() * 11);
     var num2 = Math.floor(Math.random() * 11);
-    if (world.maps[player.position.map].map[num1][num2] == ""){
+
+    var map = "map" + (Math.floor(Math.random() * 9) + 1);
+
+    console.log(map)
+
+    if (world.maps[map].map[num1][num2] == ""){
         world.maps[player.position.map].map[num1][num2] = mapPart;
         //console.log(num1, num2, mapPart);
         //startGame(world.maps[player.position.map].map);
@@ -686,7 +702,7 @@ var crafting = {
 
     page1 : {
         bread : {emoji : "🍞", wheat : 10, watter : 10, type : "inventory"},
-        bucket : {emoji : "🪣", sticks : 50, type : "inventory"},
+        bucket : {emoji : "🪣", sticks : 20, type : "inventory"},
         coal : {emoji : "⚫", sticks : 10, type : "inventory"}
     },
 
