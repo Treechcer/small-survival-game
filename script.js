@@ -73,6 +73,11 @@ function buttoTest(){
         p3 = `<button ${bonusButtons.items.action}> ${bonusButtons.items.buttonIcon} </button>`
         truthTable[3] = true;
     }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "farm" && player.inventory.watter >= 1){
+        bonusButtons.items = {action: 'onclick="chop()"', buttonIcon : "💧"}
+        p3 = `<button ${bonusButtons.items.action}> ${bonusButtons.items.buttonIcon} </button>`
+        truthTable[3] = true;
+    }
 
     var inventory = makeInventory();
     var crafting = makeCraftring();
@@ -485,6 +490,31 @@ function chop(){
         player.inventory.bucket--;
         player.inventory.watter++;
     }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "farm" && player.inventory.watter >= 1){
+        player.inventory.watter--;
+        for (farms in world.farms){
+            if (farms == "increasingNum"){
+                continue
+            }
+            //console.log(world.farms[farms].pos)
+
+            //console.log(world.maps[world.farms[farms].pos.map].map[world.farms[farms].pos.posY][world.farms[farms].pos.posX])
+
+            if ((world.farms[farms].pos.map == player.position.map) && (world.farms[farms].pos.posX == player.position.x) && world.farms[farms].pos.y == player.position.posY){
+                world.farms[farms].phase++
+                if (world.farms[farms].phase == 5){
+                    //console.log("a")
+                    //console.log(world.maps[world.farms[farms].pos.map].map[world.farms[farms].pos.posY][world.farms[farms].pos.posX])
+                    
+                    world.maps[world.farms[farms].pos.map].map[world.farms[farms].pos.posY][world.farms[farms].pos.posX] = "finishedFarm"
+                    
+                    //console.log(world.maps[world.farms[farms].pos.map].map[world.farms[farms].pos.posY][world.farms[farms].pos.posX])
+
+                    changeBlock({x: world.farms[farms].pos.posX, y : world.farms[farms].pos.posY})
+                }
+            }
+        }
+    }
 
     //console.log(player.inventory);
 
@@ -626,7 +656,6 @@ function everythingTime(){
         respawn();
     }
 
-
     //farm checking and stuff
 
     for (let farm in world.farms){
@@ -644,6 +673,7 @@ function everythingTime(){
              world.farms[farm].time.timer++;
         }
     }
+
 }
 
 function respawn(){
@@ -720,7 +750,7 @@ var crafting = {
 
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
-    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0, 
+    inventory : {leafes : 10, sticks : 10, stone : 10, pebble : 10, berries : 0, wheat : 0, bread : 0, watter : 10, fiber : 0, 
         smallFish : 0, bigFish : 0, coal : 0, bucket : 0,},
     
     // FISHes are not yet added into inventory
