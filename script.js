@@ -1,7 +1,7 @@
 function startGame(map){
     const game = document.getElementById("game");
     game.innerHTML = "";
-    var line = `<div id="gameWrap">`;
+    var line = `<div id="gameWrap"> <p id="time"> day: ${world.time.day}, ${world.time.hour}:${world.time.minute}0, ${world.weather.emoji}</p>`;
 
     for (let y = 0; y < map.length; y++){
         line += '<div class="mainG">';
@@ -638,6 +638,12 @@ function everythingTime(){
         body.style.backgroundColor = "dimgray";
     }
 
+    var b = "";
+
+    world.time.minute == 0 ? b = "0" : b = ""; 
+
+    document.getElementById("time").textContent = "day: " + world.time.day + ", " + world.time.hour + ":" + world.time.minute + b + ", " + world.weather.emoji;
+
     //This is for testing purposes, this makes the map have nothing inside - I used if for testing respawning
     /*
     for (let i = 0; i < 11; i++){
@@ -775,12 +781,17 @@ var world = {
         // phase : 1-5, time : {placeTime : 
         // {world.time.hour , world.time.minute, world.time.day}
         // how long is built: //counter of time}}
+    },
+    weather : {
+        currentWeather : "Sunny",
+        emoji : "☀️",
+        nextWeatherChanceTimeHours : 6
     }
 }
 
 //console.log(player.position.map)
 
-setInterval(everythingTime, 12500)
-//setInterval(everythingTime, 300) //for testing purposes when you need fast time
+//setInterval(everythingTime, 12500)
+setInterval(everythingTime, 300) //for testing purposes when you need fast time
 
 startGame(world.maps[player.position.map].map);
