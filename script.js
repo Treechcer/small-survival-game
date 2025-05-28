@@ -86,13 +86,13 @@ function buttoTest(){
     button.innerHTML = "";
 
     button.innerHTML = `
-  <div style="display: flex; gap: 2vw; margin-top: 2vw">
-    <div style=" border: 0.5vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+  <div style="display: flex; gap: 1vw; margin-top: 1vw">
+    <div style=" border: 0.3vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${crafting.first}
         ${crafting.second}
         ${crafting.third}
     </div>
-    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style="display: flex; flex-direction: column; border: 0.3vw solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
       <div style="display: flex;">
         <div id="top-left" class="gameS inv" style="background-color:gray;">${p0}</div>
         <div id="top-mid" class="gameS inv" style="background-color:lightgray;">
@@ -120,7 +120,7 @@ function buttoTest(){
       </div>
     </div>
 
-    <div style=" border: 3px solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style=" border: 0.3vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${inventory.first}
         ${inventory.second}
         ${inventory.third}
@@ -320,13 +320,13 @@ function makeInventory(){
     var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
 
     if (player.UI.InvPage == 0){
-        page[0] = `🪵: ${player.inventory.sticks}`
-        page[1] = `🍃: ${player.inventory.leafes}`
-        page[2] = `🪨: ${player.inventory.pebble}`
-        page[3] = `💧: ${player.inventory.watter}`
-        page[4] = `🧵: ${player.inventory.fiber}`
-        page[5] = `⛰️: ${player.inventory.stone}`
-        page[6] = `🫐: ${player.inventory.berries}`
+        page[0] = `🪵 ${player.inventory.sticks}`
+        page[1] = `🍃 ${player.inventory.leafes}`
+        page[2] = `🪨 ${player.inventory.pebble}`
+        page[3] = `💧 ${player.inventory.watter}`
+        page[4] = `🧵 ${player.inventory.fiber}`
+        page[5] = `⛰️ ${player.inventory.stone}`
+        page[6] = `🫐 ${player.inventory.berries}`
         on.button1.HTMLatribute = "disabled";
         on.button1.class = "dis";
 
@@ -334,12 +334,12 @@ function makeInventory(){
         on.button2.class = "button";
     }
     else if (player.UI.InvPage == 1){
-        page[0] = `🍞: ${player.inventory.bread}`
-        page[1] = `🌾: ${player.inventory.wheat}`
-        page[2] = `🍤: ${player.inventory.smallFish}`
-        page[3] = `🐟: ${player.inventory.bigFish}`
-        page[4] = `⚫: ${player.inventory.coal}`
-        page[5] = `🪣: ${player.inventory.bucket}`
+        page[0] = `🍞 ${player.inventory.bread}`
+        page[1] = `🌾 ${player.inventory.wheat}`
+        page[2] = `🍤 ${player.inventory.smallFish}`
+        page[3] = `🐟 ${player.inventory.bigFish}`
+        page[4] = `⚫ ${player.inventory.coal}`
+        page[5] = `🪣 ${player.inventory.bucket}`
         page[6] = ``
 
         on.button2.HTMLatribute = "disabled";
