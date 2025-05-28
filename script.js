@@ -92,31 +92,31 @@ function buttoTest(){
         ${crafting.second}
         ${crafting.third}
     </div>
-    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf";>
       <div style="display: flex;">
-        <div id="top-left" class="gameS" style="height:50px; width:50px; background-color:gray;">${p0}</div>
-        <div id="top-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
-          <button onclick="move(0,-1)">↑</button>
+        <div id="top-left" class="gameS inv" style="background-color:gray;">${p0}</div>
+        <div id="top-mid" class="gameS inv" style="background-color:lightgray;">
+            <button onclick="move(0,-1)">↑</button>
         </div>
-        <div id="top-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p1}</div>
+        <div id="top-right" class="gameS inv" style="background-color:gray;">${p1}</div>
       </div>
       <div style="display: flex;">
-        <div id="mid-left" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
+        <div id="mid-left" class="gameS inv" style="background-color:lightgray;">
           <button onclick="move(-1,0)">←</button>
         </div>
-        <div id="mid-mid" class="gameS button" style="height:50px; width:50px; background-color:gray;">
+        <div id="mid-mid" class="gameS inv" style="-color:gray;">
           <button onclick="openMenu()">≡</button>
         </div>
-        <div id="mid-right" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
+        <div id="mid-right" class="gameS inv" style="background-color:lightgray;">
           <button onclick="move(1,0)">→</button>
         </div>
       </div>
       <div style="display: flex;">
-        <div id="bot-left" class="gameS" style="height:50px; width:50px; background-color:gray;">${p2}</div>
-        <div id="bot-mid" class="gameS button" style="height:50px; width:50px; background-color:lightgray;">
+        <div id="bot-left" class="gameS inv" style="background-color:gray;">${p2}</div>
+        <div id="bot-mid" class="gameS inv" style="background-color:lightgray;">
           <button onclick="move(0,1)">↓</button>
         </div>
-        <div id="bot-right" class="gameS" style="height:50px; width:50px; background-color:gray;">${p3}</div>
+        <div id="bot-right" class="gameS inv" style="background-color:gray;">${p3}</div>
       </div>
     </div>
 
