@@ -92,7 +92,7 @@ function buttoTest(){
         ${crafting.second}
         ${crafting.third}
     </div>
-    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf";>
+    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
       <div style="display: flex;">
         <div id="top-left" class="gameS inv" style="background-color:gray;">${p0}</div>
         <div id="top-mid" class="gameS inv" style="background-color:lightgray;">
