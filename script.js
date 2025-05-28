@@ -86,13 +86,13 @@ function buttoTest(){
     button.innerHTML = "";
 
     button.innerHTML = `
-  <div style="display: flex; gap: 10px;">
-    <div style=" border: 3px solid black; border-radius: 10px; display:flex; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+  <div style="display: flex; gap: 2vw; margin-top: 2vw">
+    <div style=" border: 0.5vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${crafting.first}
         ${crafting.second}
         ${crafting.third}
     </div>
-    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf";>
+    <div style="display: flex; flex-direction: column; border: 3px solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf";>
       <div style="display: flex;">
         <div id="top-left" class="gameS inv" style="background-color:gray;">${p0}</div>
         <div id="top-mid" class="gameS inv" style="background-color:lightgray;">
@@ -120,7 +120,7 @@ function buttoTest(){
       </div>
     </div>
 
-    <div style=" border: 3px solid black; border-radius: 10px; display:flex; padding:10px; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style=" border: 3px solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${inventory.first}
         ${inventory.second}
         ${inventory.third}
