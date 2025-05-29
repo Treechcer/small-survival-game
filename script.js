@@ -87,12 +87,12 @@ function buttoTest(){
 
     button.innerHTML = `
   <div style="display: flex; gap: 1vw; margin-top: 1vw">
-    <div style=" border: 0.3vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style=" border: 0.4vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${crafting.first}
         ${crafting.second}
         ${crafting.third}
     </div>
-    <div style="display: flex; flex-direction: column; border: 0.3vw solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style="display: flex; flex-direction: column; border: 0.4vw solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
       <div style="display: flex;">
         <div id="top-left" class="gameS inv" style="background-color:gray;">${p0}</div>
         <div id="top-mid" class="gameS inv" style="background-color:lightgray;">
@@ -120,7 +120,7 @@ function buttoTest(){
       </div>
     </div>
 
-    <div style=" border: 0.3vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style=" border: 0.4vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${inventory.first}
         ${inventory.second}
         ${inventory.third}
@@ -352,19 +352,19 @@ function makeInventory(){
 
     var inv = {
     first: `<div style="display: flex; flex-direction: column;">
-            <div class="inv" style="background-color:gray;"> ${page[0]} </div>
+            <div class="inv" style="background-color:gray;"> <p> ${page[0]} </p> </div>
             <div class="inv ${on.button1.class}" style="background-color:gray;"> <button onclick="${on.button1.func}" class="${on.button1.class}" ${on.button1.HTMLatribute}> ← </button> </div>
-            <div class="inv" style="background-color:gray;"> ${page[1]} </div>
+            <div class="inv" style="background-color:gray;"> <p> ${page[1]} </p> </div>
     </div>`,
     second: `<div style="display: flex; flex-direction: column;">
-            <div class="inv" style="background-color:gray;"> ${page[2]} </div>
-            <div class="inv" style="background-color:gray;"> ${page[3]} </div>
-            <div class="inv" style="background-color:gray;"> ${page[4]}</div>
+            <div class="inv" style="background-color:gray;"> <p> ${page[2]} </p> </div>
+            <div class="inv" style="background-color:gray;"> <p> ${page[3]} </p> </div>
+            <div class="inv" style="background-color:gray;"> <p> ${page[4]} </p> </div>
     </div>`,
     third: `<div style="display: flex; flex-direction: column;">
-            <div class="inv" style="background-color:gray; "> ${page[5]} </div>
+            <div class="inv" style="background-color:gray; "> <p> ${page[5]} </p> </div>
             <div class="inv ${on.button2.class}" style="background-color:gray;"> <button onclick="${on.button2.func}" class="${on.button2.class}" ${on.button2.HTMLatribute}> → </button> </div>
-            <div class="inv" style="background-color:gray;"> ${page[6]} </div>
+            <div class="inv" style="background-color:gray;"> <p> ${page[6]} </p </div>
     </div>`
 };
 
@@ -602,8 +602,7 @@ function test(x,y){
 function everythingTime(){
     world.time.minute += 30;
     
-    world.time.minute == 60 ? (()=>{world.time.hour++;
-    world.time.minute = 0})() : null;
+    world.time.minute == 60 ? (world.time.hour++, world.time.minute = 0, world.weather.nextWeatherChanceTimeHours--, world.weather.currentWeatherTime++) : null;
     
     world.time.hour == 24 ? (world.time.hour = 0, world.time.day++) : null;
     
@@ -636,6 +635,25 @@ function everythingTime(){
     }
     else if (world.time.hour == 20) {
         body.style.backgroundColor = "dimgray";
+    }
+
+    console.log(world.weather.nextWeatherChanceTimeHours);
+
+    if (world.weather.nextWeatherChanceTimeHours == 0 || world.currentWeatherTime >= 24){
+        console.log("t");
+        nextWeather = Math.ceil(Math.random() * 100)
+        if (nextWeather > 95){
+            world.weather.currentWeather = "rain";
+            world.weather.emoji = "⛈️";
+            world.currentWeatherTime = 0;
+        }
+        else{
+            world.weather.currentWeather = "Sunny";
+            world.weather.emoji = "☀️";
+            world.currentWeatherTime = 0;
+        }
+
+        world.weather.nextWeatherChanceTimeHours = Math.ceil(Math.random() * 36) + 6;
     }
 
     var b = "";
@@ -671,6 +689,14 @@ function everythingTime(){
                 world.farms[farm].time.timer = 0;
             }
 
+            if ((world.farms[farm].time.timer >= 5 && world.farms[farm].phase < 5) && world.weather.currentWeather == "rain"){
+                var chanceToGrow = Math.ceil(Math.random() * 100)
+
+                if (chanceToGrow >= 80){
+                    world.farms[farm].phase++;
+                }
+            }
+
             if (world.farms[farm].phase == 5){
                 world.maps[world.farms[farm].pos.map].map[world.farms[farm].pos.posY][world.farms[farm].pos.posX] = "finishedFarm";
                 changeBlock({x: world.farms[farm].pos.posX, y : world.farms[farm].pos.posY})
@@ -697,7 +723,7 @@ function respawn(){
 
     var map = "map" + (Math.floor(Math.random() * 9) + 1);
 
-    console.log(map)
+    //console.log(map)
 
     if (world.maps[map].map[num1][num2] == ""){
         world.maps[player.position.map].map[num1][num2] = mapPart;
@@ -785,13 +811,14 @@ var world = {
     weather : {
         currentWeather : "Sunny",
         emoji : "☀️",
-        nextWeatherChanceTimeHours : 6
+        nextWeatherChanceTimeHours : 6,
+        currentWeatherTime : 0,
     }
 }
 
 //console.log(player.position.map)
 
-setInterval(everythingTime, 12500)
-//setInterval(everythingTime, 300) //for testing purposes when you need fast time
+//setInterval(everythingTime, 12500)
+setInterval(everythingTime, 300) //for testing purposes when you need fast time
 
 startGame(world.maps[player.position.map].map);

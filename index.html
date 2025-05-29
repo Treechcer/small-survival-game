@@ -32,7 +32,7 @@
             align-items: center;
             display: flex;
             text-align: center;
-            border: 2.5px solid black;
+            border: clamp(1px, 0.4vw, 5px) solid black;
             border-radius: 7.5px;
             box-shadow: 0 2px 5px black;
             transition: background-color 0.3s, transform 0.2s;
@@ -73,7 +73,7 @@
         }
 
         button{
-            font-size: 1.5vw;
+            font-size: clamp(20px, 1.5vw, 30px);
             cursor: pointer;
             user-select: none;
             background: none;
@@ -96,10 +96,14 @@
         }
 
         #time {
-            font-size: 1.5vw;
+            font-size: clamp(20px, 2vw, 30px);
             margin: 0px;
             text-align: center;
             font-weight: bold;
+        }
+
+        p{
+            font-size: clamp(15px, 1vw, 30px);
         }
     </style>
 </head>
