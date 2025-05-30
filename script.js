@@ -104,7 +104,7 @@ function buttoTest(){
         <div id="mid-left" class="gameS inv" style="background-color:lightgray;">
           <button onclick="move(-1,0)">←</button>
         </div>
-        <div id="mid-mid" class="gameS inv" style="-color:gray;">
+        <div id="mid-mid" class="gameS inv" style="background-color:gray;">
           <button onclick="openMenu()">≡</button>
         </div>
         <div id="mid-right" class="gameS inv" style="background-color:lightgray;">
@@ -465,9 +465,22 @@ function chop(){
         buttoTest();
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "finishedFarm"){
-        world.maps[player.position.map].map[player.position.y][player.position.x] = "";
-        player.inventory.wheat += Math.ceil(Math.random() * 3) + 1;
+        world.maps[player.position.map].map[player.position.y][player.position.x] = "farm";
+        player.inventory.wheat += Math.ceil(Math.random() * 5) + 2;
         //startGame(world.maps[player.position.map].map);
+
+        for (let farm in world.farms){
+            if (farm == "increasingNum"){
+                continue;
+            }
+
+            if ((world.farms[farm].pos.posX == player.position.x) && (world.farms[farm].pos.posY == player.position.y) && (world.farms[farm].pos.map == player.position.map)){
+                world.farms[farm].phase = 2;
+            }
+
+            console.log(world.farms[farm])
+        }
+
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
@@ -477,7 +490,7 @@ function chop(){
         if (rand > 0.8){
             player.inventory.bigFish++
         }
-        else if(rand > 0.5){
+        else if(rand > 0.3){
             player.inventory.smallFish += Math.ceil(Math.random() * 4)
         }
 
