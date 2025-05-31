@@ -924,8 +924,8 @@ var world = {
 
 //console.log(player.position.map)
 
-//setInterval(everythingTime, 12500)
-setInterval(everythingTime, 300) //for testing purposes when you need fast time
+setInterval(everythingTime, 12500)
+//setInterval(everythingTime, 300) //for testing purposes when you need fast time
 
 startGame(world.maps[player.position.map].map);
 
