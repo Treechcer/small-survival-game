@@ -804,7 +804,7 @@ function generateBiome(mapNum){
 
     if (mapBiomes.check){
         for (let i = biomes.length-1; i >= 0; i--){
-            if (mapBiomes.biomeCount[biomes[i]] >= 2){
+            if (mapBiomes.biomeCount[biomes[i]] >= 3){
                 biomes.splice(i, 1);
             }
         }
