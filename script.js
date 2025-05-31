@@ -54,12 +54,10 @@ function buttoTest(){
         truthTable[0] = true;
     }
     
-    if (world.maps[player.position.map].map[player.position.y][player.position.x] == ""){
+    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.sticks > 2 && player.inventory.leafes > 4)){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
         p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
-        if (player.inventory.sticks > 2 && player.inventory.leafes > 4){
-            truthTable[1] = true;
-        }
+        truthTable[1] = true;
     }
 
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
@@ -377,24 +375,52 @@ function changeBlock(position){
     document.getElementById(id).style.backgroundColor = color;
 }
 
-function generateMap(exitT, exitB, exitL, exitR){ //these variables are true or false to disables exits
+function generateMap(exitT, exitB, exitL, exitR, biome){ //these variables are true or false to disables exits
+
+    var mapElements = [];
+
+    if (biome == "plains"){
+        mapElements = [
+            {type : "stone", chance : 2.85},
+            {type : "bush", chance : 1.7  },
+            {type : "water", chance : 1.3 },
+            {type : "", chance : 0 }
+        ]
+    }
+    else if (biome == "desert"){
+        mapElements = [
+            {type: "cactus", chance: 2.7},
+            {type: "stone",  chance: 2.2},
+            {type: "water",  chance: 1.6},
+            {type: "sand",   chance: 0}
+        ]
+    }
+    else if (biome == "hills"){
+        mapElements = [
+            {type: "ironOre",     chance: 2.7},
+            {type: "stone",       chance: 1.8},
+            {type: "bush",        chance: 1.3},
+            {type: "rockyBottom", chance: 0}
+        ]
+    }
+    
     var map = [];
     for (let i = 0; i < 11; i++){
         let row = [];
         for (let j = 0; j < 11; j++){
             var element = Math.random()*3;
             var mapPart;
-            if (element > 2.85){
-                mapPart = "stone";
+            if (element > mapElements[0].chance){
+                mapPart = mapElements[0].type;
             }
-            else if(element > 1.7){
-                mapPart = "bush";
+            else if(element > mapElements[1].chance){
+                mapPart = mapElements[1].type;
             }
-            else if (element > 1.3){
-                mapPart = "water";
+            else if (element > mapElements[2].chance){
+                mapPart = mapElements[2].type;
             }
-            else if (element > 0){
-                mapPart = ""
+            else if (element > mapElements[3].chance){
+                mapPart = mapElements[3].type;
             }
             row.push(mapPart);
         }
@@ -449,17 +475,17 @@ function build(building){
 function chop(){
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
-        player.inventory.sticks += Math.floor(Math.random() * 2) + 1;
-        player.inventory.leafes += Math.floor(Math.random() * 3) + 2;
-        player.inventory.fiber += Math.floor(Math.random() * 2);
+        player.inventory.sticks += Math.floor(Math.random() * 2) + 2;
+        player.inventory.leafes += Math.floor(Math.random() * 3) + 4;
+        player.inventory.fiber += Math.floor(Math.random() * 2) + 1;
         //startGame(world.maps[player.position.map].map);
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone"){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "";
-        player.inventory.stone += Math.floor(Math.random()) + 1;
-        player.inventory.pebble += Math.floor(Math.random() * 2) + 2;
+        player.inventory.stone += Math.floor(Math.random() * 2) + 1;
+        player.inventory.pebble += Math.floor(Math.random() * 2) + 3;
         //startGame(world.maps[player.position.map].map);
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
@@ -600,10 +626,22 @@ function test(x,y){
         color = "SaddleBrown";
     }
     else if (world.maps[player.position.map].map[y][x] == "stone"){
-        color = "lightgray";
+        color = "	#778899";
     }
     else if (world.maps[player.position.map].map[y][x] == "finishedFarm"){
         color = "brown";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "sand"){
+        color = "#F0E68C";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "cactus"){
+        color = "#2E8B57";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "rockyBottom") {
+        color = "lightgray";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "ironOre") {
+        color = "#b7410e";
     }
     else{
         color = "lightgreen";
@@ -747,6 +785,15 @@ function respawn(){
     }
 }
 
+function generateBiome(mapNum){
+    biomes = ["plains", "desert", "hills"];
+    var temp = Math.floor(Math.random() * biomes.length);
+
+    mapBiomes["map" + mapNum] = biomes[temp];
+
+    return biomes[temp];
+}
+
 document.addEventListener('keydown', function(event) {
     if (event.key == "w" || event.key == "ArrowUp"){
         move(0,-1);
@@ -770,15 +817,15 @@ var crafting = {
               
               //this crazy ramble is like 80% of all comments xD kinda sad ngl
 
-        fishingRod : {emoji : "🎣", sticks : 20, fiber : 15, uses : 5, type : "tool"}, //test crafting recipe
-        pickaxe : {emoji : "⛏️", sticks : 25, stone : 15, pebble : 25, uses : 5, type : "tool"},
-        axe : {emoji : "🪓", sticks : 20, stone : 10, pebble : 25, leafes : 10, uses : 5, type : "tool"}
+        fishingRod : {emoji : "🎣", sticks : 10, fiber : 6, uses : 10, type : "tool"}, //test crafting recipe
+        pickaxe : {emoji : "⛏️", sticks : 10, stone : 8, pebble : 10, uses : 10, type : "tool"},
+        axe : {emoji : "🪓", sticks : 8, stone : 6, pebble : 10, leafes : 4, uses : 10, type : "tool"}
     },
 
     page1 : {
-        bread : {emoji : "🍞", wheat : 10, watter : 10, type : "inventory"},
-        bucket : {emoji : "🪣", sticks : 20, type : "inventory"},
-        coal : {emoji : "⚫", sticks : 10, type : "inventory"}
+        bread : {emoji : "🍞", wheat : 3, watter : 2, type : "inventory"},
+        bucket : {emoji : "🪣", sticks : 8, pebble: 5, type : "inventory"},
+        coal : {emoji : "⚫", sticks : 5, type : "inventory"}
     },
 
     page2 : { //unfinished
@@ -790,7 +837,7 @@ var crafting = {
 
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
-    inventory : {leafes : 10, sticks : 10, stone : 10, pebble : 10, berries : 0, wheat : 0, bread : 0, watter : 10, fiber : 0, 
+    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0, 
         smallFish : 0, bigFish : 0, coal : 0, bucket : 0,},
     
     // FISHes are not yet added into inventory
@@ -800,18 +847,30 @@ var player = {
     tools : {fishingRod : {uses : 0}, pickaxe : {uses : 0}, axe : {uses : 0}} //here are added tools as "inventory" and their usage and other metadata needed
 }
 
+var mapBiomes = {
+    map1 : "",
+    map2 : "",
+    map3 : "",
+    map4 : "",
+    map5 : "",
+    map6 : "",
+    map7 : "",
+    map8 : "",
+    map9 : "",
+}
+
 var world = {
     time : {day : 0, hour : 12, minute : 0},
     maps : {
-        map1 : {map : generateMap(false, true, false, true), num : 1},
-        map2 : {map : generateMap(false, true, true, true), num : 2},
-        map3 : {map : generateMap(false, true, true, false), num : 3},
-        map4 : {map : generateMap(true, true, false, true), num : 4},
-        map5 : {map : generateMap(true, true, true, true), num : 5},
-        map6 : {map : generateMap(true, true, true, false), num : 6},
-        map7 : {map : generateMap(true, false, false, true), num : 7},
-        map8 : {map : generateMap(true, false, true, true), num : 8},
-        map9 : {map : generateMap(true, false, true, false), num : 9}
+        map1 : {map : generateMap(false, true,  false, true , generateBiome(1), 1), num : 1},
+        map2 : {map : generateMap(false, true,  true,  true , generateBiome(2), 2), num : 2},
+        map3 : {map : generateMap(false, true,  true,  false, generateBiome(6), 3), num : 3},
+        map4 : {map : generateMap(true,  true,  false, true , generateBiome(4), 4), num : 4},
+        map5 : {map : generateMap(true,  true,  true,  true , generateBiome(5), 5), num : 5},
+        map6 : {map : generateMap(true,  true,  true,  false, generateBiome(6), 6), num : 6},
+        map7 : {map : generateMap(true,  false, false, true , generateBiome(7), 7), num : 7},
+        map8 : {map : generateMap(true,  false, true,  true , generateBiome(8), 8), num : 8},
+        map9 : {map : generateMap(true,  false, true,  false, generateBiome(9), 9), num : 9}
     },
     farms : {
         increasingNum : 0,
@@ -835,3 +894,18 @@ setInterval(everythingTime, 12500)
 //setInterval(everythingTime, 300) //for testing purposes when you need fast time
 
 startGame(world.maps[player.position.map].map);
+
+console.log(mapBiomes.biomNums)
+
+//TODO: add that correct things respawn in correct biomes, 
+//TODO: add destroying farms (for like 80% of what they cost or something like that)
+//TODO: add furnaces, cooking food
+//TODO: add hunger and health to maintain and not die
+//TODO: make iron and cactuses breakable
+//TODO: make biomes spawn at least once
+//TODO: make the map 4x4 and add biome or something for like ocean to make it as island
+//TODO: add more type of tools
+//TODO: add score or ending, goal or something liek that
+//TODO: make some comments in the code and make it readable
+
+//all things I want to do, not in order... I'll add more and delete those I did
