@@ -542,7 +542,7 @@ function chop(){
 
             //console.log(world.maps[world.farms[farms].pos.map].map[world.farms[farms].pos.posY][world.farms[farms].pos.posX])
 
-            if ((world.farms[farms].pos.map == player.position.map) && (world.farms[farms].pos.posX == player.position.x) && world.farms[farms].pos.y == player.position.posY){
+            if ((world.farms[farms].pos.map == player.position.map) && (world.farms[farms].pos.posX == player.position.x) && world.farms[farms].pos.y == player.position.y){
                 world.farms[farms].phase++
                 if (world.farms[farms].phase == 5){
                     //console.log("a")
