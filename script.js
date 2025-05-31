@@ -171,23 +171,23 @@ function craftControl(page){
             if (material == "emoji" || material == "uses" || material == "type"){
                 continue;
             }
-            console.log(material);
-            console.log(material, page[obj][material]);
+            //console.log(material);
+            //console.log(material, page[obj][material]);
 
             if (!(page[obj][material] <= player.inventory[material])){
-                console.log(page[obj][material], player.inventory[material])
+                //console.log(page[obj][material], player.inventory[material])
                 isCraftable = false;
                 break
             }
 
             //console.log(crafting[obj][material] <= player.inventory[material])
-            console.log(page[obj][material], player.inventory[material])
+            //console.log(page[obj][material], player.inventory[material])
         }
         
         craftableThings.push({[`${obj}`]: page[obj], emoji : crafting[player.UI.CraftPage][obj].emoji, isCraftable : isCraftable, name : obj});
     }
 
-    console.log(craftableThings);
+    //console.log(craftableThings);
 
     return craftableThings;
 }
@@ -279,7 +279,7 @@ function makeCraftring(){
 }
 
 function craftThing(thing){
-    console.log(thing);
+    //console.log(thing);
     //console.log(thing[thing.name])
     //console.log(player.inventory)
 
@@ -288,7 +288,7 @@ function craftThing(thing){
             continue
         }
         player.inventory[key] -= thing[thing.name][key];
-        console.log(player.inventory[key], thing[thing.name][key], key, thing[thing.name])
+        //console.log(player.inventory[key], thing[thing.name][key], key, thing[thing.name])
 
     }
 
@@ -375,9 +375,8 @@ function changeBlock(position){
     document.getElementById(id).style.backgroundColor = color;
 }
 
-function generateMap(exitT, exitB, exitL, exitR, biome){ //these variables are true or false to disables exits
-
-    var mapElements = [];
+function biomeCheck(biome){
+    var mapElements;
 
     if (biome == "plains"){
         mapElements = [
@@ -403,6 +402,12 @@ function generateMap(exitT, exitB, exitL, exitR, biome){ //these variables are t
             {type: "rockyBottom", chance: 0}
         ]
     }
+
+    return mapElements;
+}
+
+function generateMap(exitT, exitB, exitL, exitR, biome){ //these variables are true or false to disables exits
+    var mapElements = biomeCheck(biome);
     
     var map = [];
     for (let i = 0; i < 11; i++){
@@ -444,8 +449,6 @@ function generateMap(exitT, exitB, exitL, exitR, biome){ //these variables are t
 }
 
 function build(building){
-    // TODO: make the building work, hopefully add more things? maybe upgrades? maybe other things? farms?
-
     if (building == "farm" && player.inventory.sticks >= 3 && player.inventory.leafes >= 5){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "farm";
         world.farms["farm" + world.farms.increasingNum] = {
@@ -504,7 +507,7 @@ function chop(){
                 world.farms[farm].phase = 2;
             }
 
-            console.log(world.farms[farm])
+            //console.log(world.farms[farm])
         }
 
         changeBlock({x : player.position.x, y : player.position.y});
@@ -688,10 +691,10 @@ function everythingTime(){
         body.style.backgroundColor = "dimgray";
     }
 
-    console.log(world.weather.nextWeatherChanceTimeHours);
+    //console.log(world.weather.nextWeatherChanceTimeHours);
 
     if (world.weather.nextWeatherChanceTimeHours == 0 || world.currentWeatherTime >= 24){
-        console.log("t");
+        //console.log("t");
         nextWeather = Math.ceil(Math.random() * 100)
         if (nextWeather > 95){
             world.weather.currentWeather = "rain";
@@ -760,39 +763,62 @@ function everythingTime(){
 }
 
 function respawn(){
-    var element = Math.random()*2;
-    var mapPart;
-    if (element >= 1){
-        mapPart = "bush";
+    var map = "map" + (Math.floor(Math.random() * 9) + 1);
+    var bio = biomeCheck(mapBiomes[map])
+    var respawnable = [];
+
+    for (let i = 0; i < bio.length; i++){
+        if (bio[i].type != "water" && bio[i].type != "sand" && bio[i].type != "rockyBottom" && bio[i].type != ""){
+            respawnable.push(bio[i].type)
+        }
     }
-    else if (element >= 0){
-        mapPart = "stone";
-    }
+
+    var element = Math.floor(Math.random() * respawnable.length);
+    var mapPart = respawnable[element];
+
+    //console.log(mapPart)
 
     var num1 = Math.floor(Math.random() * 11);
     var num2 = Math.floor(Math.random() * 11);
 
-    var map = "map" + (Math.floor(Math.random() * 9) + 1);
-
-    //console.log(map)
-
-    if (world.maps[map].map[num1][num2] == ""){
-        world.maps[player.position.map].map[num1][num2] = mapPart;
-        //console.log(num1, num2, mapPart);
-        //startGame(world.maps[player.position.map].map);
-        changeBlock({x: num2,y: num1})
-        //console.log(String(num2) , String(num1))
+    if (world.maps[map].map[num1][num2] == "" || world.maps[map].map[num1][num2] == "sand" || world.maps[map].map[num1][num2] == "rockyBottom"){
+        world.maps[map].map[num1][num2] = mapPart;
+        if (map == player.position.map){
+            changeBlock({x: num2,y: num1})
+        }
     }
 }
 
 function generateBiome(mapNum){
-    biomes = ["plains", "desert", "hills"];
+    var ret;
+
+    if (biomes.length == 0){
+        mapBiomes.check = false;
+        biomes = ["plains", "desert", "hills"];
+    }
+
     var temp = Math.floor(Math.random() * biomes.length);
+    var chosenBiome = biomes[temp];
+    mapBiomes.biomeCount[chosenBiome]++;
+    ret = chosenBiome;
 
-    mapBiomes["map" + mapNum] = biomes[temp];
+    if (mapBiomes.check){
+        for (let i = biomes.length-1; i >= 0; i--){
+            if (mapBiomes.biomeCount[biomes[i]] >= 2){
+                biomes.splice(i, 1);
+            }
+        }
+    }
 
-    return biomes[temp];
+    mapBiomes["map" + mapNum] = ret;
+
+    //console.log(chosenBiome, biomes, ret);
+
+    return ret;
+
+    //this is some... God awfull code, but it looks like it works lmao
 }
+
 
 document.addEventListener('keydown', function(event) {
     if (event.key == "w" || event.key == "ArrowUp"){
@@ -847,7 +873,15 @@ var player = {
     tools : {fishingRod : {uses : 0}, pickaxe : {uses : 0}, axe : {uses : 0}} //here are added tools as "inventory" and their usage and other metadata needed
 }
 
+var biomes = ["plains", "desert", "hills"];
+
 var mapBiomes = {
+    biomeCount :{
+        plains : 0,
+        desert : 0,
+        hills : 0,
+    },
+    check : true,
     map1 : "",
     map2 : "",
     map3 : "",
@@ -864,7 +898,7 @@ var world = {
     maps : {
         map1 : {map : generateMap(false, true,  false, true , generateBiome(1), 1), num : 1},
         map2 : {map : generateMap(false, true,  true,  true , generateBiome(2), 2), num : 2},
-        map3 : {map : generateMap(false, true,  true,  false, generateBiome(6), 3), num : 3},
+        map3 : {map : generateMap(false, true,  true,  false, generateBiome(3), 3), num : 3},
         map4 : {map : generateMap(true,  true,  false, true , generateBiome(4), 4), num : 4},
         map5 : {map : generateMap(true,  true,  true,  true , generateBiome(5), 5), num : 5},
         map6 : {map : generateMap(true,  true,  true,  false, generateBiome(6), 6), num : 6},
@@ -890,14 +924,14 @@ var world = {
 
 //console.log(player.position.map)
 
-setInterval(everythingTime, 12500)
-//setInterval(everythingTime, 300) //for testing purposes when you need fast time
+//setInterval(everythingTime, 12500)
+setInterval(everythingTime, 300) //for testing purposes when you need fast time
 
 startGame(world.maps[player.position.map].map);
 
-console.log(mapBiomes.biomNums)
+//console.log(mapBiomes)
 
-//TODO: add that correct things respawn in correct biomes, 
+//TODO: add that correct things respawn in correct biomes - Check, finished probably??? maybe working idk
 //TODO: add destroying farms (for like 80% of what they cost or something like that)
 //TODO: add furnaces, cooking food
 //TODO: add hunger and health to maintain and not die
