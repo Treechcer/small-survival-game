@@ -72,8 +72,13 @@ function buttoTest(){
     }
     if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.stone >= 5 && player.inventory.leafes >= 5 && player.inventory.sticks >= 6)){
         bonusButtons.build = {action: `onclick="build('furnace')"`, buttonIcon : "🔥"}
-        p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
+        p2 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
         truthTable[2] = true;
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "furnace"){
+        bonusButtons.build = {action: `onclick="build('delFurnace')"`, buttonIcon : "❌"}
+        p2 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
+        truthTable[1] = true;
     }
 
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.inventory.bucket >= 1){
@@ -491,6 +496,14 @@ function build(building){
         world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
         player.inventory.sticks += 2;
         player.inventory.leafes += 3;
+    }
+    else if (building == "delFurnace"){
+        var biomeNow = biomeCheck(mapBiomes[player.position.map])
+
+        world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
+            player.inventory.stone += 3;
+        player.inventory.leafes += 2;
+        player.inventory.sticks += 3;
     }
     else if (building == "furnace" && (player.inventory.stone >= 5 && player.inventory.leafes >= 5 && player.inventory.sticks >= 6)){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "furnace";
