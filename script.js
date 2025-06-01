@@ -54,8 +54,13 @@ function buttoTest(){
         truthTable[0] = true;
     }
     
-    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.sticks > 2 && player.inventory.leafes > 4)){
+    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.sticks >= 3 && player.inventory.leafes >= 5)){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
+        p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
+        truthTable[1] = true;
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "farm"){
+        bonusButtons.build = {action: `onclick="build('delFarm')"`, buttonIcon : "❌"}
         p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
         truthTable[1] = true;
     }
@@ -63,6 +68,11 @@ function buttoTest(){
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
         bonusButtons.tools = {action: 'onclick="chop()"', buttonIcon : "🐟"}
         p2 = `<button ${bonusButtons.tools.action}> ${bonusButtons.tools.buttonIcon} </button>`
+        truthTable[2] = true;
+    }
+    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.stone >= 5 && player.inventory.leafes >= 5 && player.inventory.sticks >= 6)){
+        bonusButtons.build = {action: `onclick="build('furnace')"`, buttonIcon : "🔥"}
+        p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
         truthTable[2] = true;
     }
 
@@ -160,19 +170,25 @@ function changePageCrafting(isRight){
 }
 
 function craftControl(page){
-
-    // TODO need to fix it maybe? Idk if it works correctly and I'm lazy and tired now so gn :3
-
     var craftableThings = [];
 
     for (let obj in page){
         var isCraftable = true;
         for (let material in page[obj]){
+
+            if (material == "event"){
+                if (world.maps[player.position.map].map[player.position.y][player.position.x] != "furnace"){
+                    isCraftable = false;
+                    break
+                }
+                else{
+                    continue
+                }
+            }
+
             if (material == "emoji" || material == "uses" || material == "type"){
                 continue;
             }
-            //console.log(material);
-            //console.log(material, page[obj][material]);
 
             if (!(page[obj][material] <= player.inventory[material])){
                 //console.log(page[obj][material], player.inventory[material])
@@ -193,8 +209,6 @@ function craftControl(page){
 }
 
 function makeCraftring(){    
-    //TODO: Make this actually work and not just inventroy 2 lmao
-
     /*
     PAGES IDEA
 
@@ -284,7 +298,7 @@ function craftThing(thing){
     //console.log(player.inventory)
 
     for (key in thing[thing.name]){
-        if (key == "emoji" || key == "name" || key == "type" || key == "uses"){
+        if (key == "emoji" || key == "name" || key == "type" || key == "uses" || key == "event"){
             continue
         }
         player.inventory[key] -= thing[thing.name][key];
@@ -471,13 +485,36 @@ function build(building){
         player.inventory.leafes -= 5;
         //console.log(world.farms);
     }
+    else if (building == "delFarm"){
+        var biomeNow = biomeCheck(mapBiomes[player.position.map])
+
+        world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
+        player.inventory.sticks += 2;
+        player.inventory.leafes += 3;
+    }
+    else if (building == "furnace" && (player.inventory.stone >= 5 && player.inventory.leafes >= 5 && player.inventory.sticks >= 6)){
+        world.maps[player.position.map].map[player.position.y][player.position.x] = "furnace";
+        world.furnaces["furnace" + world.furnaces.increasingNum] = {
+            position : {
+                x : player.position.x, 
+                y : player.position.y, 
+                map : player.position.map
+            }
+        }
+        
+        world.furnaces.increasingNum++;
+        player.inventory.stone -= 5;
+        player.inventory.leafes -= 5;
+        player.inventory.sticks -= 6;
+    }
 
     buttoTest();
 }
 
 function chop(){
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
-        world.maps[player.position.map].map[player.position.y][player.position.x] = "";
+        var biomeNow = biomeCheck(mapBiomes[player.position.map])
+        world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
         player.inventory.sticks += Math.floor(Math.random() * 2) + 2;
         player.inventory.leafes += Math.floor(Math.random() * 3) + 4;
         player.inventory.fiber += Math.floor(Math.random() * 2) + 1;
@@ -486,7 +523,8 @@ function chop(){
         buttoTest();
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone"){
-        world.maps[player.position.map].map[player.position.y][player.position.x] = "";
+        var biomeNow = biomeCheck(mapBiomes[player.position.map])
+        world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
         player.inventory.stone += Math.floor(Math.random() * 2) + 1;
         player.inventory.pebble += Math.floor(Math.random() * 2) + 3;
         //startGame(world.maps[player.position.map].map);
@@ -645,6 +683,9 @@ function test(x,y){
     }
     else if (world.maps[player.position.map].map[y][x] == "ironOre") {
         color = "#b7410e";
+    }
+    else if (world.maps[player.position.map].map[y][x] == "furnace"){
+        color = "#3d3d3d"
     }
     else{
         color = "lightgreen";
@@ -843,15 +884,17 @@ var crafting = {
               
               //this crazy ramble is like 80% of all comments xD kinda sad ngl
 
-        fishingRod : {emoji : "🎣", sticks : 10, fiber : 6, uses : 10, type : "tool"}, //test crafting recipe
-        pickaxe : {emoji : "⛏️", sticks : 10, stone : 8, pebble : 10, uses : 10, type : "tool"},
-        axe : {emoji : "🪓", sticks : 8, stone : 6, pebble : 10, leafes : 4, uses : 10, type : "tool"}
+        fishingRod : {emoji : "🎣", sticks : 10, fiber : 6, uses : 10, type : "tool", event : "none"},
+        pickaxe : {emoji : "⛏️", sticks : 10, stone : 8, pebble : 10, uses : 10, type : "tool", event : "none"},
+        axe : {emoji : "🪓", sticks : 8, stone : 6, pebble : 10, leafes : 4, uses : 10, type : "tool", event : "none"}
     },
 
     page1 : {
-        bread : {emoji : "🍞", wheat : 3, watter : 2, type : "inventory"},
-        bucket : {emoji : "🪣", sticks : 8, pebble: 5, type : "inventory"},
-        coal : {emoji : "⚫", sticks : 5, type : "inventory"}
+        bread : {emoji : "🍞", wheat : 3, watter : 2, type : "inventory", event : "furnace"},
+        bucket : {emoji : "🪣", sticks : 8, pebble: 5, type : "inventory", event : "none"},
+        coal : {emoji : "⚫", sticks : 5, type : "inventory", event : "furnace"},
+        cookedFish : {emoji : "🍢", smallFish : 1, coal : 2, type : "inventory", event : "furnace"},
+        cookedBigFish : {emoji : "🍲", bigFish : 2, coal : 3, type : "inventory", event : "furnace"},
     },
 
     page2 : { //unfinished
@@ -863,8 +906,8 @@ var crafting = {
 
 var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
-    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0, 
-        smallFish : 0, bigFish : 0, coal : 0, bucket : 0,},
+    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 3, bread : 0, watter : 2, fiber : 0, 
+        smallFish : 0, bigFish : 0, coal : 0, bucket : 0, cookedFish : 0, cookedBigFish : 0},
     
     // FISHes are not yet added into inventory
 
@@ -914,6 +957,12 @@ var world = {
         // {world.time.hour , world.time.minute, world.time.day}
         // how long is built: //counter of time}}
     },
+    furnaces : {
+        increasingNum : 0,
+        
+        // furnace + n -> position : {x, y, map}
+
+    },
     weather : {
         currentWeather : "Sunny",
         emoji : "☀️",
@@ -932,11 +981,11 @@ startGame(world.maps[player.position.map].map);
 //console.log(mapBiomes)
 
 //TODO: add that correct things respawn in correct biomes - Check, finished probably??? maybe working idk
-//TODO: add destroying farms (for like 80% of what they cost or something like that)
-//TODO: add furnaces, cooking food
+//TODO: add destroying farms (for like 80% of what they cost or something like that) - Check, it should work
+//TODO: add furnaces, cooking food - Check, working (most likely)
 //TODO: add hunger and health to maintain and not die
 //TODO: make iron and cactuses breakable
-//TODO: make biomes spawn at least once
+//TODO: make biomes spawn at least once - check (they all spawn 3 times)
 //TODO: make the map 4x4 and add biome or something for like ocean to make it as island
 //TODO: add more type of tools
 //TODO: add score or ending, goal or something liek that
