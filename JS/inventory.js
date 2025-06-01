@@ -34,6 +34,21 @@ export function makeInventory(){
         page[3] = `🐟 ${player.inventory.bigFish}`
         page[4] = `⚫ ${player.inventory.coal}`
         page[5] = `🪣 ${player.inventory.bucket}`
+        page[6] = `🧲 ${player.inventory.iron}`
+
+        on.button1.HTMLatribute = "";
+        on.button1.class = "button";
+
+        on.button2.HTMLatribute = "";
+        on.button2.class = "button";
+    }
+    else if (player.UI.InvPage == 2){
+        page[0] = `🎣 ${player.tools.fishingRod.uses}`
+        page[1] = `🔩 ${player.inventory.ironBar}`
+        page[2] = `⛏️ ${player.tools.pickaxe.uses}`
+        page[3] = `🌵 ${player.inventory.cactus}`
+        page[4] = ``
+        page[5] = `🪓 ${player.tools.axe.uses}`
         page[6] = ``
 
         on.button2.HTMLatribute = "disabled";

@@ -21,17 +21,17 @@ export function buttoTest(){
     var truthTable = [false, false, false, false]
 
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
-        bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🌲"}
+        bonusButtons.mine = {action: 'onclick="chop(`bush`)"', buttonIcon : "🌲"}
         p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
         truthTable[0] = true;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone"){
-        bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🪨"}
+        bonusButtons.mine = {action: 'onclick="chop(`stone`)"', buttonIcon : "🪨"}
         p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
         truthTable[0] = true;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "finishedFarm"){
-        bonusButtons.mine = {action: 'onclick="chop()"', buttonIcon : "🌾"}
+        bonusButtons.mine = {action: 'onclick="chop(`finishedFarm`)"', buttonIcon : "🌾"}
         p0 = `<button ${bonusButtons.mine.action}> ${bonusButtons.mine.buttonIcon} </button>`
         truthTable[0] = true;
     }
@@ -48,7 +48,7 @@ export function buttoTest(){
     }
 
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
-        bonusButtons.tools = {action: 'onclick="chop()"', buttonIcon : "🐟"}
+        bonusButtons.tools = {action: 'onclick="chop(`fishing`)"', buttonIcon : "🐟"}
         p2 = `<button ${bonusButtons.tools.action}> ${bonusButtons.tools.buttonIcon} </button>`
         truthTable[2] = true;
     }
@@ -64,13 +64,23 @@ export function buttoTest(){
     }
 
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.inventory.bucket >= 1){
-        bonusButtons.items = {action: 'onclick="chop()"', buttonIcon : "🔵"}
+        bonusButtons.items = {action: 'onclick="chop(`waterGather`)"', buttonIcon : "🔵"}
         p3 = `<button ${bonusButtons.items.action}> ${bonusButtons.items.buttonIcon} </button>`
         truthTable[3] = true;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "farm" && player.inventory.watter >= 1){
-        bonusButtons.items = {action: 'onclick="chop()"', buttonIcon : "💧"}
+        bonusButtons.items = {action: 'onclick="chop(`watering`)"', buttonIcon : "💧"}
         p3 = `<button ${bonusButtons.items.action}> ${bonusButtons.items.buttonIcon} </button>`
+        truthTable[3] = true;
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "ironOre" && player.tools.pickaxe.uses > 0){
+        bonusButtons.tools = {action: 'onclick="chop(`iron`)"', buttonIcon : "⛏️"}
+        p2 = `<button ${bonusButtons.tools.action}> ${bonusButtons.tools.buttonIcon} </button>`
+        truthTable[3] = true;
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "cactus" && player.tools.axe.uses > 0){
+        bonusButtons.tools = {action: 'onclick="chop(`cactus`)"', buttonIcon : "🪓"}
+        p2 = `<button ${bonusButtons.tools.action}> ${bonusButtons.tools.buttonIcon} </button>`
         truthTable[3] = true;
     }
 
@@ -82,12 +92,12 @@ export function buttoTest(){
 
     button.innerHTML = `
   <div style="display: flex; gap: 1vw; margin-top: 1vw">
-    <div style=" border: 0.4vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style=" border: clamp(3px, 0.4vw, 5px) solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${crafting.first}
         ${crafting.second}
         ${crafting.third}
     </div>
-    <div style="display: flex; flex-direction: column; border: 0.4vw solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style="display: flex; flex-direction: column; border: clamp(3px, 0.4vw, 5px) solid black; border-radius: 10px; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
       <div style="display: flex;">
         <div id="top-left" class="gameS inv" style="background-color:gray;">${p0}</div>
         <div id="top-mid" class="gameS inv" style="background-color:lightgray;">
@@ -115,7 +125,7 @@ export function buttoTest(){
       </div>
     </div>
 
-    <div style=" border: 0.4vw solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
+    <div style=" border: clamp(3px, 0.4vw, 5px) solid black; border-radius: 10px; display:flex; padding:1vw; box-shadow: 2px 3px 5px black; background-color:#bfbfbf">
         ${inventory.first}
         ${inventory.second}
         ${inventory.third}

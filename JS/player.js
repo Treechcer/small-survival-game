@@ -3,8 +3,10 @@ import { buttoTest } from "./UI.js";
 
 export var player = {
     position : {x : Math.floor(Math.random()*10), y : Math.floor(Math.random()*10), map : "map" + Math.floor(Math.random() * 9 + 1)},
-    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 3, bread : 0, watter : 2, fiber : 0, 
-        smallFish : 0, bigFish : 0, coal : 0, bucket : 0, cookedFish : 0, cookedBigFish : 0},
+    inventory : {leafes : 0, sticks : 0, stone : 0, pebble : 0, berries : 0, wheat : 0, bread : 0, watter : 0, fiber : 0, 
+        smallFish : 0, bigFish : 0, coal : 0, bucket : 0, cookedFish : 0, cookedBigFish : 0, iron : 0, ironBar : 0,
+        cactus : 0,
+    },
     
     // FISHes are not yet added into inventory
 
@@ -117,8 +119,8 @@ export function move(x, y){
     }
 }
 
-export function chop(){
-    if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
+export function chop(action){
+    if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush" && action == "bush"){
         var biomeNow = biomeCheck(mapBiomes[player.position.map])
         world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
         player.inventory.sticks += Math.floor(Math.random() * 2) + 2;
@@ -128,7 +130,7 @@ export function chop(){
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
-    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone"){
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone" && action == "stone"){
         var biomeNow = biomeCheck(mapBiomes[player.position.map])
         world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
         player.inventory.stone += Math.floor(Math.random() * 2) + 1;
@@ -137,7 +139,7 @@ export function chop(){
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
-    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "finishedFarm"){
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "finishedFarm" && action == "finishedFarm"){
         world.maps[player.position.map].map[player.position.y][player.position.x] = "farm";
         player.inventory.wheat += Math.ceil(Math.random() * 5) + 2;
         //startGame(world.maps[player.position.map].map);
@@ -157,7 +159,7 @@ export function chop(){
         changeBlock({x : player.position.x, y : player.position.y});
         buttoTest();
     }
-    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0){
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0 && action == "fishing"){
         player.tools.fishingRod.uses--;
         var rand = Math.random();
         if (rand > 0.8){
@@ -172,11 +174,11 @@ export function chop(){
         console.log(player.inventory);
         */
     }
-    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.inventory.bucket >= 1){
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.inventory.bucket >= 1 && action == "waterGather"){
         player.inventory.bucket--;
         player.inventory.watter++;
     }
-    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "farm" && player.inventory.watter >= 1){
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "farm" && player.inventory.watter >= 1 && action == "watering"){
         player.inventory.watter--;
         for (let farms in world.farms){
             if (farms == "increasingNum"){
@@ -200,6 +202,19 @@ export function chop(){
                 }
             }
         }
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "ironOre" && player.tools.pickaxe.uses > 0 && action == "iron"){
+        player.tools.pickaxe.uses--;
+        player.inventory.iron += Math.ceil(Math.random() * 3) + 1;
+        var biomeNow = biomeCheck(mapBiomes[player.position.map])
+        world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
+    }
+    else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "cactus" && player.tools.axe.uses > 0 && action == "cactus"){
+        player.tools.axe.uses--;
+        player.inventory.watter += Math.ceil(Math.random() * 2) - 1;
+        player.inventory.cactus += Math.ceil(Math.random() * 3) + 1;
+        var biomeNow = biomeCheck(mapBiomes[player.position.map])
+        world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
     }
 
     //console.log(player.inventory);

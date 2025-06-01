@@ -4,12 +4,12 @@ import { buttoTest } from "./UI.js";
 
 export function changePageCrafting(isRight){
     if (!isRight){
-        player.UI.CraftPage = "page" + --player.UI.CraftPage[player.UI.CraftPage.length-1];
+        player.UI.CraftPage = "page" + parseInt(player.UI.CraftPage[4] - 1);
     }
     else if (isRight){
-        player.UI.CraftPage = "page" + ++player.UI.CraftPage[player.UI.CraftPage.length-1];
+        player.UI.CraftPage = "page" + parseInt(player.UI.CraftPage[4] + 1);
     }
-
+    
     buttoTest();
 }
 
@@ -183,6 +183,7 @@ export var crafting = {
         coal : {emoji : "⚫", sticks : 5, type : "inventory", event : "furnace"},
         cookedFish : {emoji : "🍢", smallFish : 1, coal : 2, type : "inventory", event : "furnace"},
         cookedBigFish : {emoji : "🍲", bigFish : 2, coal : 3, type : "inventory", event : "furnace"},
+        ironBar : {emoji : "🔩", coal : 3, iron : 3, type : "furnace"}
     },
 
     page2 : { //unfinished
