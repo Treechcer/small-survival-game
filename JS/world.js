@@ -100,8 +100,8 @@ export function biomeCheck(biome){
     }
     else if (biome == "desert"){
         mapElements = [
-            {type: "cactus", chance: 2.7},
-            {type: "stone",  chance: 2.2},
+            {type: "cactus", chance: 2.4},
+            {type: "stone",  chance: 2},
             {type: "water",  chance: 1.6},
             {type: "sand",   chance: 0}
         ]

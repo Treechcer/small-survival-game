@@ -19,6 +19,7 @@ export function buttoTest(){
     var p3 = p0;
 
     var truthTable = [false, false, false, false]
+	var biomeNow = biomeCheck(mapBiomes[player.position.map])
 
     if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush"){
         bonusButtons.mine = {action: 'onclick="chop(`bush`)"', buttonIcon : "🌲"}
@@ -36,7 +37,7 @@ export function buttoTest(){
         truthTable[0] = true;
     }
     
-    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.sticks >= 3 && player.inventory.leafes >= 5)){
+    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == biomeNow) && (player.inventory.sticks >= 3 && player.inventory.leafes >= 5)){
         bonusButtons.build = {action: `onclick="build('farm')"`, buttonIcon : "🏠"}
         p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
         truthTable[1] = true;
@@ -52,7 +53,7 @@ export function buttoTest(){
         p2 = `<button ${bonusButtons.tools.action}> ${bonusButtons.tools.buttonIcon} </button>`
         truthTable[2] = true;
     }
-    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.stone >= 5 && player.inventory.leafes >= 5 && player.inventory.sticks >= 6)){
+    if ((world.maps[player.position.map].map[player.position.y][player.position.x] == biomeNow) && (player.inventory.stone >= 5 && player.inventory.leafes >= 5 && player.inventory.sticks >= 6)){
         bonusButtons.build = {action: `onclick="build('furnace')"`, buttonIcon : "🔥"}
         p2 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
         truthTable[2] = true;
