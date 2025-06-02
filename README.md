@@ -32,13 +32,14 @@ Getting Started
 To run the project locally:
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/Treechcer/small-survival-game
 cd small-survival-game
 ```
 
 2. Open the game
-You can open the index.html file directly in your browser:
+   You can open the index.html file directly in your browser:
 
 ```bash
 start index.html     # On Windows
@@ -53,5 +54,6 @@ Or, you can use local server (tbh I have no idea how, you have to figure that ou
 Last alternative, you can use [Github pages](https://treechcer.github.io/small-survival-game/)
 
 🛠️ Requirements
+
 - Modern browser (Chrome, Firefox, Edge, etc.)
 - No external libraries required

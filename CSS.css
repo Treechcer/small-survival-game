@@ -1,100 +1,100 @@
-        body {
-            height: 100vh; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
 
-        #game {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;  
-            width: 100%; 
-        }
+#game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
 
-        .gameS {
-            background-color: black;
-            width: clamp(30px, 2vw, 50px);
-            height: clamp(30px, 2vw, 50px);
-            margin: 0.3vw;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            text-align: center;
-            border: clamp(1px, 0.4vw, 3.5px) solid black;
-            border-radius: 7.5px;
-            box-shadow: 0 2px 5px black;
-            transition: background-color 0.3s, transform 0.2s;
-        }
+.gameS {
+  background-color: black;
+  width: clamp(30px, 2vw, 50px);
+  height: clamp(30px, 2vw, 50px);
+  margin: 0.3vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  text-align: center;
+  border: clamp(1px, 0.4vw, 3.5px) solid black;
+  border-radius: 7.5px;
+  box-shadow: 0 2px 5px black;
+  transition: background-color 0.3s, transform 0.2s;
+}
 
-        .inv {
-            background-color: black;
-            width: clamp(30px, 2vw, 50px);
-            height: clamp(30px, 2vw, 50px);
-            margin: 5px;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            text-align: center;
-            border: 2.5px solid black;
-            border-radius: 7.5px;
-            box-shadow: 0 2px 5px black;
-            transition: background-color 0.3s, transform 0.3s;
-            user-select: none;
-        }
+.inv {
+  background-color: black;
+  width: clamp(30px, 2vw, 50px);
+  height: clamp(30px, 2vw, 50px);
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  text-align: center;
+  border: 2.5px solid black;
+  border-radius: 7.5px;
+  box-shadow: 0 2px 5px black;
+  transition: background-color 0.3s, transform 0.3s;
+  user-select: none;
+}
 
-        .mainG {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.mainG {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 7px;
-        }
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7px;
+}
 
-        .button:hover{
-            transform: scale(1.1);
-            filter: brightness(1.2);
-        }
+.button:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
 
-        button{
-            font-size: clamp(20px, 1.5vw, 30px);
-            cursor: pointer;
-            user-select: none;
-            background: none;
-            border: none;
-            height: 100%;
-            width: 100%;
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-        }
+button {
+  font-size: clamp(20px, 1.5vw, 30px);
+  cursor: pointer;
+  user-select: none;
+  background: none;
+  border: none;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 
-        .dis{
-            cursor: default;
-        }
+.dis {
+  cursor: default;
+}
 
-        #gameWrap{
-            height: 100%;
-            width: 100%;
-        }
+#gameWrap {
+  height: 100%;
+  width: 100%;
+}
 
-        #time {
-            font-size: clamp(20px, 2vw, 30px);
-            margin: 0px;
-            text-align: center;
-            font-weight: bold;
-        }
+#time {
+  font-size: clamp(20px, 2vw, 30px);
+  margin: 0px;
+  text-align: center;
+  font-weight: bold;
+}
 
-        p{
-            font-size: clamp(15px, 1vw, 30px);
-        }
+p {
+  font-size: clamp(15px, 1vw, 30px);
+}
