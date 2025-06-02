@@ -1,7 +1,7 @@
 import { player } from "./player.js"
 import { buttoTest } from "./UI.js";
 
-export function makeInventory(){
+export function makeInventory() {
     /*
     inspiration on how to make it, because I wrote similar code:
 
@@ -11,9 +11,9 @@ export function makeInventory(){
 
     */
     var page = [];
-    var on = {button1: {class: "", HTMLatribute : "", func : "changePage(false)"}, button2 : {class: "", HTMLatribute : "", func : "changePage(true)"}}
+    var on = { button1: { class: "", HTMLatribute: "", func: "changePage(false)" }, button2: { class: "", HTMLatribute: "", func: "changePage(true)" } }
 
-    if (player.UI.InvPage == 0){
+    if (player.UI.InvPage == 0) {
         page[0] = `🪵 ${player.inventory.sticks}`
         page[1] = `🍃 ${player.inventory.leafes}`
         page[2] = `🪨 ${player.inventory.pebble}`
@@ -27,7 +27,7 @@ export function makeInventory(){
         on.button2.HTMLatribute = "";
         on.button2.class = "button";
     }
-    else if (player.UI.InvPage == 1){
+    else if (player.UI.InvPage == 1) {
         page[0] = `🍞 ${player.inventory.bread}`
         page[1] = `🌾 ${player.inventory.wheat}`
         page[2] = `🍤 ${player.inventory.smallFish}`
@@ -42,7 +42,7 @@ export function makeInventory(){
         on.button2.HTMLatribute = "";
         on.button2.class = "button";
     }
-    else if (player.UI.InvPage == 2){
+    else if (player.UI.InvPage == 2) {
         page[0] = `🎣 ${player.tools.fishingRod.uses}`
         page[1] = `🔩 ${player.inventory.ironBar}`
         page[2] = `⛏️ ${player.tools.pickaxe.uses}`
@@ -60,17 +60,17 @@ export function makeInventory(){
 
 
     var inv = {
-    first: `<div style="display: flex; flex-direction: column;">
+        first: `<div style="display: flex; flex-direction: column;">
             <div class="inv" style="background-color:gray;"> <p> ${page[0]} </p> </div>
             <div class="inv ${on.button1.class}" style="background-color:gray;"> <button onclick="${on.button1.func}" class="${on.button1.class}" ${on.button1.HTMLatribute}> ← </button> </div>
             <div class="inv" style="background-color:gray;"> <p> ${page[1]} </p> </div>
     </div>`,
-    second: `<div style="display: flex; flex-direction: column;">
+        second: `<div style="display: flex; flex-direction: column;">
             <div class="inv" style="background-color:gray;"> <p> ${page[2]} </p> </div>
             <div class="inv" style="background-color:gray;"> <p> ${page[3]} </p> </div>
             <div class="inv" style="background-color:gray;"> <p> ${page[4]} </p> </div>
     </div>`,
-    third: `<div style="display: flex; flex-direction: column;">
+        third: `<div style="display: flex; flex-direction: column;">
             <div class="inv" style="background-color:gray; "> <p> ${page[5]} </p> </div>
             <div class="inv ${on.button2.class}" style="background-color:gray;"> <button onclick="${on.button2.func}" class="${on.button2.class}" ${on.button2.HTMLatribute}> → </button> </div>
             <div class="inv" style="background-color:gray;"> <p> ${page[6]} </p </div>
@@ -80,11 +80,11 @@ export function makeInventory(){
     return inv;
 }
 
-export function changePage(isRight){
-    if (!isRight){
+export function changePage(isRight) {
+    if (!isRight) {
         player.UI.InvPage--;
     }
-    else if (isRight){
+    else if (isRight) {
         player.UI.InvPage++;
     }
 
