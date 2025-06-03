@@ -1,5 +1,5 @@
 import { player, build, chop, move } from "./player.js"
-import { world } from "./world.js"
+import { world, biomeCheck, mapBiomes } from "./world.js"
 import { changePageCrafting, makeCraftring, craftThing } from "./crafting.js";
 import { makeInventory, changePage } from "./inventory.js";
 
