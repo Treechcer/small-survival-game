@@ -1,25 +1,26 @@
 import { player, move } from "./player.js"
-import { world, test } from "./world.js"
+import { world, test, redrawBoard } from "./world.js"
 import { everythingTime } from "./time.js"
 import { buttoTest } from "./UI.js";
 
 function startGame(map) {
     const game = document.getElementById("game");
     game.innerHTML = "";
-    var line = `<div id="gameWrap"> <p id="time"> day: ${world.time.day}, ${world.time.hour}:${world.time.minute}0, ${world.weather.emoji}</p>`;
-
+    var line = `<div id="gameWrap"> <p id="time"> day: ${world.time.day}, ${world.time.hour}:${world.time.minute}0, ${world.weather.emoji}</p> <div id="hud"><div id="hp"><div id="bg"></div></div></div>`;
     for (let y = 0; y < map.length; y++) {
-        line += '<div class="mainG">';
-        for (let i = 0; i < map.length; i++) {
+        line += `<div class="mainG">`;
+        for (let i = 0; i < map[y].length; i++) {
             var color = test(i, y);
             line += `<div> <div class="gameS" style="background-color:${color}" id="${i}${y}"> </div> </div>`;
         }
         line += "</div>";
-
     }
-    line += "</div>";
+
+    line += `<div id="hud2"><div id="hunger"><div id="hungerFill"></div></div></div>`;
+    line += '</div>';
+
     game.innerHTML = line;
-    game.innerHTML += '<div id="butts"> </div>'
+    game.innerHTML += '<div id="butts"> </div>';
 
     buttoTest();
 }
@@ -41,8 +42,8 @@ document.addEventListener('keydown', function (event) {
 
 //console.log(player.position.map)
 
-setInterval(everythingTime, 12500)
-//setInterval(everythingTime, 300) //for testing purposes when you need fast time
+//setInterval(everythingTime, 12500)
+setInterval(everythingTime, 300) //for testing purposes when you need fast time
 
 startGame(world.maps[player.position.map].map);
 
@@ -60,3 +61,6 @@ startGame(world.maps[player.position.map].map);
 //TODO: make some comments in the code and make it readable
 
 //all things I want to do, not in order... I'll add more and delete those I did
+
+
+//TODO : Fix dying? Fix that you don't take hunger down the first hour or it doesn't change? idk just fix it and add death and game reset. Fix all and any bugs while on it

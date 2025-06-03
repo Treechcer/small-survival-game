@@ -8,6 +8,14 @@ export function everythingTime() {
 
     world.time.hour == 24 ? (world.time.hour = 0, world.time.day++) : null;
 
+    player.hunger > 0 ? player.hunger -= Math.ceil(Math.random() * 4) + 1 : (player.health--, document.getElementById("bg").style.height = player.health);
+
+    if (player.hunger < 0){
+        player.hunger = 0;
+    }
+
+    document.getElementById("hungerFill").style.height = player.hunger;
+
     //document.getElementById("time").innerHTML = `${world.time.hour} : ${world.time.minute}`
 
     var body = document.querySelector("body");

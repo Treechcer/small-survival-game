@@ -1,6 +1,6 @@
 import { player } from "./player.js"
 import { world } from "./world.js"
-import { buttoTest } from "./UI.js";
+import { buttoTest, checkFood } from "./UI.js";
 
 export function changePageCrafting(isRight) {
     if (!isRight) {
@@ -161,6 +161,7 @@ export function craftThing(thing) {
 
     //console.log(player.inventory)
 
+    checkFood();
     buttoTest();
 }
 

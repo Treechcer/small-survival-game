@@ -1,19 +1,22 @@
 import { world, mapBiomes, biomeCheck, redrawBoard, changeBlock, test } from "./world.js"
-import { buttoTest } from "./UI.js";
+import { buttoTest, checkFood } from "./UI.js";
 
 export var player = {
     position: { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), map: "map" + Math.floor(Math.random() * 9 + 1) },
     inventory: {
-        leafes: 0, sticks: 0, stone: 0, pebble: 0, berries: 0, wheat: 0, bread: 0, watter: 0, fiber: 0,
+        leafes: 0, sticks: 0, stone: 0, pebble: 0, berries: 0, wheat: 0, bread: 1, watter: 0, fiber: 0,
         smallFish: 0, bigFish: 0, coal: 0, bucket: 0, cookedFish: 0, cookedBigFish: 0, iron: 0, ironBar: 0,
         cactus: 0,
     },
-
+    food : ["berries", "bread", "cookedFish", "cookedBigFish"],
+    hasFood : false,
     // FISHes are not yet added into inventory
 
     UI: { InvPage: 0, CraftPage: "page0" },
     move: { canMove: true, intervalID: "n" },
-    tools: { fishingRod: { uses: 0 }, pickaxe: { uses: 0 }, axe: { uses: 0 } } //here are added tools as "inventory" and their usage and other metadata needed
+    tools: { fishingRod: { uses: 0 }, pickaxe: { uses: 0 }, axe: { uses: 0 } }, //here are added tools as "inventory" and their usage and other metadata needed
+    hunger : 5, // percent, 100 => fully
+    health : 5 // Might not even use in future??
 }
 
 export function build(building) {
@@ -70,6 +73,7 @@ export function build(building) {
         player.inventory.sticks -= 6;
     }
 
+    checkFood();
     buttoTest();
 }
 
@@ -220,5 +224,6 @@ export function chop(action) {
 
     //console.log(player.inventory);
 
-    buttoTest()
+    checkFood();
+    buttoTest();
 }
