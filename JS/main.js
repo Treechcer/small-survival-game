@@ -1,12 +1,12 @@
-import { player, move } from "./player.js"
-import { world, test, redrawBoard } from "./world.js"
+import { player, move, makePlayer } from "./player.js"
+import { world, test, makeWorld, redrawBoard} from "./world.js"
 import { everythingTime } from "./time.js"
 import { buttoTest } from "./UI.js";
 
 function startGame(map) {
     const game = document.getElementById("game");
     game.innerHTML = "";
-    var line = `<div id="gameWrap"> <p id="time"> day: ${world.time.day}, ${world.time.hour}:${world.time.minute}0, ${world.weather.emoji}</p> <div id="hud"><div id="hp"><div id="bg"></div></div></div>`;
+    var line = `<div id="gameWrap"> <p id="time"> day: ${world.time.day}, ${world.time.hour}:${world.time.minute}0, score: ${player.score}, ${world.weather.emoji}</p> <div id="hud"><div id="hp"><div id="bg"></div></div></div>`;
     for (let y = 0; y < map.length; y++) {
         line += `<div class="mainG">`;
         for (let i = 0; i < map[y].length; i++) {
@@ -39,6 +39,13 @@ document.addEventListener('keydown', function (event) {
         move(1, 0);
     }
 });
+
+export function gameReset(){
+    makePlayer();
+    makeWorld();
+    document.getElementById("bg").style.height = (player.health * 20) + "%";
+    redrawBoard();
+}
 
 //console.log(player.position.map)
 

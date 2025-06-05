@@ -1,17 +1,20 @@
 import { player } from "./player.js"
 import { world, mapBiomes, biomeCheck, changeBlock } from "./world.js"
+import { gameReset } from "./main.js";
 
 export function everythingTime() {
     
-    player.score += Math.ceil(Math.random() * 3) + 2
+    player.score++;
 
     world.time.minute += 30;
 
     world.time.minute == 60 ? (world.time.hour++, world.time.minute = 0, world.weather.nextWeatherChanceTimeHours--, world.weather.currentWeatherTime++) : 1;
 
-    world.time.hour == 24 ? (world.time.hour = 0, world.time.day++) : 1;
+    world.time.hour == 24 ? (world.time.hour = 0, world.time.day++, player.score += 3) : 1;
 
     player.hunger > 0 ? player.hunger -= Math.ceil(Math.random() * 4) + 1 : (player.health--, document.getElementById("bg").style.height = (player.health * 20) + "%");
+
+    player.health == 0 ? (gameReset()) : 1;
 
     if (player.hunger < 0){
         player.hunger = 0;
@@ -73,7 +76,7 @@ export function everythingTime() {
 
     world.time.minute == 0 ? b = "0" : b = "";
 
-    document.getElementById("time").textContent = "day: " + world.time.day + ", " + world.time.hour + ":" + world.time.minute + b + ", " + world.weather.emoji;
+    document.getElementById("time").textContent = "day: " + world.time.day + ", " + world.time.hour + ":" + world.time.minute + b + `, score: ${player.score}, ` + world.weather.emoji;
 
     //This is for testing purposes, this makes the map have nothing inside - I used if for testing respawning
     /*

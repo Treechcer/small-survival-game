@@ -139,40 +139,45 @@ export var mapBiomes = {
     map9: "",
 }
 
-export var world = {
-    time: { day: 0, hour: 12, minute: 0 },
-    maps: {
-        map1: { map: generateMap(false, true, false, true, generateBiome(1), 1), num: 1 },
-        map2: { map: generateMap(false, true, true, true, generateBiome(2), 2), num: 2 },
-        map3: { map: generateMap(false, true, true, false, generateBiome(3), 3), num: 3 },
-        map4: { map: generateMap(true, true, false, true, generateBiome(4), 4), num: 4 },
-        map5: { map: generateMap(true, true, true, true, generateBiome(5), 5), num: 5 },
-        map6: { map: generateMap(true, true, true, false, generateBiome(6), 6), num: 6 },
-        map7: { map: generateMap(true, false, false, true, generateBiome(7), 7), num: 7 },
-        map8: { map: generateMap(true, false, true, true, generateBiome(8), 8), num: 8 },
-        map9: { map: generateMap(true, false, true, false, generateBiome(9), 9), num: 9 }
-    },
-    farms: {
-        increasingNum: 0,
-        // hierarchy ==>
-        // world -> farms -> farm + increasingNum (0-n) -> {position : {X, Y, MAP}, 
-        // phase : 1-5, time : {placeTime : 
-        // {world.time.hour , world.time.minute, world.time.day}
-        // how long is built: //counter of time}}
-    },
-    furnaces: {
-        increasingNum: 0,
+export function makeWorld(){
+    world = {
+        time: { day: 0, hour: 12, minute: 0 },
+        maps: {
+            map1: { map: generateMap(false, true, false, true, generateBiome(1), 1), num: 1 },
+            map2: { map: generateMap(false, true, true, true, generateBiome(2), 2), num: 2 },
+            map3: { map: generateMap(false, true, true, false, generateBiome(3), 3), num: 3 },
+            map4: { map: generateMap(true, true, false, true, generateBiome(4), 4), num: 4 },
+            map5: { map: generateMap(true, true, true, true, generateBiome(5), 5), num: 5 },
+            map6: { map: generateMap(true, true, true, false, generateBiome(6), 6), num: 6 },
+            map7: { map: generateMap(true, false, false, true, generateBiome(7), 7), num: 7 },
+            map8: { map: generateMap(true, false, true, true, generateBiome(8), 8), num: 8 },
+            map9: { map: generateMap(true, false, true, false, generateBiome(9), 9), num: 9 }
+        },
+        farms: {
+            increasingNum: 0,
+            // hierarchy ==>
+            // world -> farms -> farm + increasingNum (0-n) -> {position : {X, Y, MAP}, 
+            // phase : 1-5, time : {placeTime : 
+            // {world.time.hour , world.time.minute, world.time.day}
+            // how long is built: //counter of time}}
+        },
+        furnaces: {
+            increasingNum: 0,
 
-        // furnace + n -> position : {x, y, map}
+            // furnace + n -> position : {x, y, map}
 
-    },
-    weather: {
-        currentWeather: "Sunny",
-        emoji: "☀️",
-        nextWeatherChanceTimeHours: 6,
-        currentWeatherTime: 0,
+        },
+        weather: {
+            currentWeather: "Sunny",
+            emoji: "☀️",
+            nextWeatherChanceTimeHours: 6,
+            currentWeatherTime: 0,
+        }
     }
 }
+
+export var world;
+makeWorld();
 
 export function test(x, y) {
     var color;

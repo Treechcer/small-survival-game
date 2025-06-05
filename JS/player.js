@@ -1,7 +1,8 @@
 import { world, mapBiomes, biomeCheck, redrawBoard, changeBlock, test } from "./world.js"
 import { buttoTest, checkFood } from "./UI.js";
 
-export var player = {
+export function makePlayer(){
+    player = {
     position: { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), map: "map" + Math.floor(Math.random() * 9 + 1) },
     inventory: {
         leafes: 0, sticks: 0, stone: 0, pebble: 0, berries: 0, wheat: 0, bread: 1, watter: 0, fiber: 0,
@@ -15,10 +16,14 @@ export var player = {
     UI: { InvPage: 0, CraftPage: "page0" },
     move: { canMove: true, intervalID: "n" },
     tools: { fishingRod: { uses: 0 }, pickaxe: { uses: 0 }, axe: { uses: 0 } }, //here are added tools as "inventory" and their usage and other metadata needed
-    hunger : 5, // percent, 100 => fully
-    health : 5, // Might not even use in future??
+    hunger : 100, // percents, 100 => fully
+    health : 5,
     score : 0
+    }
 }
+
+export var player;
+makePlayer();
 
 export function build(building) {
     if (building == "farm" && player.inventory.sticks >= 3 && player.inventory.leafes >= 5) {
