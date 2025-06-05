@@ -127,7 +127,7 @@ p {
 #hp, #hunger {
     background-color: gray;
     width: 30px;
-    height: 400px;
+    height: clamp(400px, 50vh + 120px, 620px);
     border-radius: 5px;
     border: 2px solid black;
     overflow: hidden;

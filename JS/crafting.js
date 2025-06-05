@@ -21,20 +21,24 @@ export function craftControl(page) {
         for (let material in page[obj]) {
 
             if (material == "event") {
-                if (world.maps[player.position.map].map[player.position.y][player.position.x] != "furnace" && page[material] == "furnace") {
+                if (world.maps[player.position.map].map[player.position.y][player.position.x] != "furnace" && page[obj]["event"] == "furnace") {
+                    console.log(page[obj]);
                     isCraftable = false;
                     break
                 }
                 else {
+                    console.log(page[obj][material])
                     continue
                 }
             }
 
-            if (material == "emoji" || material == "uses" || material == "type") {
+            if (material == "emoji" || material == "uses" || material == "type" || material == "event") {
                 continue;
             }
 
             if (!(page[obj][material] <= player.inventory[material])) {
+                console.log(page[obj])
+                console.log(page[obj]["event"])
                 //console.log(page[obj][material], player.inventory[material])
                 isCraftable = false;
                 break
@@ -81,7 +85,7 @@ export function makeCraftring() {
         console.log(craftable[0])
         console.log(craftable[0].fishingRod)
         */
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 4; i++) {
             craftable[i].isCraftable ? page[i] = `<button onclick="craftThing(crafting.activeRecipes[${i}])"> ${craftable[i].emoji} </button>` : page[i] = ``;
         }
         page[3] = ``
@@ -101,12 +105,9 @@ export function makeCraftring() {
     }
     else if (player.UI.CraftPage == "page1") {
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 6; i++) {
             craftable[i].isCraftable ? page[i] = `<button onclick="craftThing(crafting.activeRecipes[${i}])"> ${craftable[i].emoji} </button>` : page[i] = ``;
         }
-        page[3] = ``
-        page[4] = ``
-        page[5] = ``
         page[6] = ``
 
         on.button2.HTMLatribute = "disabled";
@@ -160,6 +161,9 @@ export function craftThing(thing) {
     }
 
     player.score += Math.ceil(Math.random() * 2) + 1
+    var b;
+    world.time.minute == 0 ? b = "0" : b = "";
+    document.getElementById("time").textContent = "day: " + world.time.day + ", " + world.time.hour + ":" + world.time.minute + b + `, score: ${player.score}, ` + world.weather.emoji;
 
     //console.log(player.inventory)
 
@@ -186,7 +190,7 @@ export var crafting = {
         coal: { emoji: "⚫", sticks: 5, type: "inventory", event: "furnace" },
         cookedFish: { emoji: "🍢", smallFish: 1, coal: 2, type: "inventory", event: "furnace" },
         cookedBigFish: { emoji: "🍲", bigFish: 2, coal: 3, type: "inventory", event: "furnace" },
-        ironBar: { emoji: "🔩", coal: 3, iron: 3, type: "furnace" }
+        ironBar: { emoji: "🔩", coal: 3, iron: 3, type: "inventory", event : "frunace" }
     },
 
     page2: { //unfinished

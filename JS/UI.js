@@ -171,6 +171,10 @@ export function buttoTest() {
 			el.classList.add("button")
 		}
 	}
+
+	var b;
+	world.time.minute == 0 ? b = "0" : b = "";
+	document.getElementById("time").textContent = "day: " + world.time.day + ", " + world.time.hour + ":" + world.time.minute + b + `, score: ${player.score}, ` + world.weather.emoji;
 }
 
 export function eat(){
@@ -195,7 +199,11 @@ export function eat(){
 		player.hunger = 100;
 	}
 
+	var b;
+	world.time.minute == 0 ? b = "0" : b = "";
 	player.score += Math.ceil(Math.random() * 5) + 1
+	document.getElementById("time").textContent = "day: " + world.time.day + ", " + world.time.hour + ":" + world.time.minute + b + `, score: ${player.score}, ` + world.weather.emoji;
+
 
 	document.getElementById("hungerFill").style.height = String(player.hunger) + "%";
 
