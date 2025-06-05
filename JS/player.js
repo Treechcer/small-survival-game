@@ -5,9 +5,9 @@ export function makePlayer(){
     player = {
     position: { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), map: "map" + Math.floor(Math.random() * 9 + 1) },
     inventory: {
-        leafes: 100, sticks: 100, stone: 100, pebble: 100, berries: 100, wheat: 100, bread: 100, watter: 100, fiber: 100,
-        smallFish: 100, bigFish: 100, coal: 200, bucket: 100, cookedFish: 100, cookedBigFish: 100, iron: 100, ironBar: 100,
-        cactus: 100,
+        leafes: 0, sticks: 0, stone: 0, pebble: 0, berries: 0, wheat: 0, bread: 0, watter: 0, fiber: 0,
+        smallFish: 0, bigFish: 0, coal: 0, bucket: 0, cookedFish: 0, cookedBigFish: 0, iron: 0, ironBar: 0,
+        cactus: 0,
     },
     food : ["berries", "bread", "cookedFish", "cookedBigFish"],
     hasFood : false,
