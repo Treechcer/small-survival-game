@@ -215,7 +215,7 @@ export function checkFood(){
 	var found = false;
 
 	for (let i = 0; i < player.food.length; i++){
-		console.log(player.inventory[player.food[i]]);
+		//console.log(player.inventory[player.food[i]]);
 		if (player.inventory[player.food[i]] > 0){
 			player.hasFood = true;
 			found = true;

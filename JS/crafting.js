@@ -22,12 +22,12 @@ export function craftControl(page) {
 
             if (material == "event") {
                 if (world.maps[player.position.map].map[player.position.y][player.position.x] != "furnace" && page[obj]["event"] == "furnace") {
-                    console.log(page[obj]);
+                    //console.log(page[obj]);
                     isCraftable = false;
                     break
                 }
                 else {
-                    console.log(page[obj][material])
+                    //console.log(page[obj][material])
                     continue
                 }
             }
@@ -37,8 +37,8 @@ export function craftControl(page) {
             }
 
             if (!(page[obj][material] <= player.inventory[material])) {
-                console.log(page[obj])
-                console.log(page[obj]["event"])
+                //console.log(page[obj])
+                //console.log(page[obj]["event"])
                 //console.log(page[obj][material], player.inventory[material])
                 isCraftable = false;
                 break
