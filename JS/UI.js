@@ -21,8 +21,9 @@ export function buttoTest() {
 
 	var isEating = false;
 
-	var truthTable = [false, false, false, false]
-	var biomeNow = biomeCheck(mapBiomes[player.position.map])
+	var truthTable = [false, false, false, false];
+	var biomeNow = biomeCheck(mapBiomes[player.position.map]);
+	biomeNow = biomeNow[3].type;
 
 	if (world.maps[player.position.map].map[player.position.y][player.position.x] == "bush") {
 		bonusButtons.mine = { action: 'onclick="chop(`bush`)"', buttonIcon: "🌲" }
@@ -46,7 +47,7 @@ export function buttoTest() {
 		isEating = true;
 	}
 
-	if ((world.maps[player.position.map].map[player.position.y][player.position.x] == biomeNow) && (player.inventory.sticks >= 3 && player.inventory.leafes >= 5)) {
+	if ((world.maps[player.position.map].map[player.position.y][player.position.x] == "") && (player.inventory.sticks >= 3 && player.inventory.leafes >= 5)) {
 		bonusButtons.build = { action: `onclick="build('farm')"`, buttonIcon: "🏠" }
 		p1 = `<button ${bonusButtons.build.action}> ${bonusButtons.build.buttonIcon} </button>`
 		truthTable[1] = true;
@@ -193,6 +194,10 @@ export function eat(){
 	if (player.hunger > 100){
 		player.hunger = 100;
 	}
+
+	player.score += Math.ceil(Math.random() * 5) + 1
+
+	document.getElementById("hungerFill").style.height = String(player.hunger) + "%";
 
 	checkFood();
 	buttoTest();

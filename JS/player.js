@@ -16,7 +16,8 @@ export var player = {
     move: { canMove: true, intervalID: "n" },
     tools: { fishingRod: { uses: 0 }, pickaxe: { uses: 0 }, axe: { uses: 0 } }, //here are added tools as "inventory" and their usage and other metadata needed
     hunger : 5, // percent, 100 => fully
-    health : 5 // Might not even use in future??
+    health : 5, // Might not even use in future??
+    score : 0
 }
 
 export function build(building) {
@@ -40,6 +41,7 @@ export function build(building) {
         world.farms.increasingNum++;
         player.inventory.sticks -= 3;
         player.inventory.leafes -= 5;
+        player.score += Math.ceil(Math.random() * 4) + 3;
         //console.log(world.farms);
     }
     else if (building == "delFarm") {
@@ -71,6 +73,8 @@ export function build(building) {
         player.inventory.stone -= 5;
         player.inventory.leafes -= 5;
         player.inventory.sticks -= 6;
+
+        player.score += Math.ceil(Math.random() * 4) + 3;
     }
 
     checkFood();
@@ -134,6 +138,7 @@ export function chop(action) {
         //startGame(world.maps[player.position.map].map);
         changeBlock({ x: player.position.x, y: player.position.y });
         buttoTest();
+        player.score++;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "stone" && action == "stone") {
         var biomeNow = biomeCheck(mapBiomes[player.position.map])
@@ -143,6 +148,7 @@ export function chop(action) {
         //startGame(world.maps[player.position.map].map);
         changeBlock({ x: player.position.x, y: player.position.y });
         buttoTest();
+        player.score++;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "finishedFarm" && action == "finishedFarm") {
         world.maps[player.position.map].map[player.position.y][player.position.x] = "farm";
@@ -162,6 +168,7 @@ export function chop(action) {
         }
 
         changeBlock({ x: player.position.x, y: player.position.y });
+        player.score += Math.ceil(Math.random() * 3) + 2;
         buttoTest();
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.tools.fishingRod.uses > 0 && action == "fishing") {
@@ -169,9 +176,11 @@ export function chop(action) {
         var rand = Math.random();
         if (rand > 0.8) {
             player.inventory.bigFish++
+            player.score += Math.ceil(Math.random() * 2) + 1;
         }
         else if (rand > 0.3) {
             player.inventory.smallFish += Math.ceil(Math.random() * 4)
+            player.score++;
         }
 
         /*
@@ -182,6 +191,7 @@ export function chop(action) {
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "water" && player.inventory.bucket >= 1 && action == "waterGather") {
         player.inventory.bucket--;
         player.inventory.watter++;
+        player.score++;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "farm" && player.inventory.watter >= 1 && action == "watering") {
         player.inventory.watter--;
@@ -207,12 +217,14 @@ export function chop(action) {
                 }
             }
         }
+        player.score++;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "ironOre" && player.tools.pickaxe.uses > 0 && action == "iron") {
         player.tools.pickaxe.uses--;
         player.inventory.iron += Math.ceil(Math.random() * 3) + 1;
         var biomeNow = biomeCheck(mapBiomes[player.position.map])
         world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
+        player.score += 2;
     }
     else if (world.maps[player.position.map].map[player.position.y][player.position.x] == "cactus" && player.tools.axe.uses > 0 && action == "cactus") {
         player.tools.axe.uses--;
@@ -220,6 +232,7 @@ export function chop(action) {
         player.inventory.cactus += Math.ceil(Math.random() * 3) + 1;
         var biomeNow = biomeCheck(mapBiomes[player.position.map])
         world.maps[player.position.map].map[player.position.y][player.position.x] = biomeNow[3].type;
+        player.score += 2;
     }
 
     //console.log(player.inventory);

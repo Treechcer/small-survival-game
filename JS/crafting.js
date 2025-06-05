@@ -159,6 +159,8 @@ export function craftThing(thing) {
         player.inventory[thing.name]++;
     }
 
+    player.score += Math.ceil(Math.random() * 2) + 1
+
     //console.log(player.inventory)
 
     checkFood();

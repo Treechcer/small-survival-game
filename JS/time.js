@@ -2,13 +2,16 @@ import { player } from "./player.js"
 import { world, mapBiomes, biomeCheck, changeBlock } from "./world.js"
 
 export function everythingTime() {
+    
+    player.score += Math.ceil(Math.random() * 3) + 2
+
     world.time.minute += 30;
 
     world.time.minute == 60 ? (world.time.hour++, world.time.minute = 0, world.weather.nextWeatherChanceTimeHours--, world.weather.currentWeatherTime++) : 1;
 
     world.time.hour == 24 ? (world.time.hour = 0, world.time.day++) : 1;
 
-    player.hunger > 0 ? player.hunger -= Math.ceil(Math.random() * 4) + 1 : (player.health--, document.getElementById("bg").style.height = player.health + "%");
+    player.hunger > 0 ? player.hunger -= Math.ceil(Math.random() * 4) + 1 : (player.health--, document.getElementById("bg").style.height = (player.health * 20) + "%");
 
     if (player.hunger < 0){
         player.hunger = 0;
