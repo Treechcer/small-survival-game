@@ -55,19 +55,3 @@ setInterval(everythingTime, 12500)
 startGame(world.maps[player.position.map].map);
 
 //console.log(mapBiomes)
-
-//TODO: add that correct things respawn in correct biomes - Check, finished probably??? maybe working idk
-//TODO: add destroying farms (for like 80% of what they cost or something like that) - Check, it should work
-//TODO: add furnaces, cooking food - Check, working (most likely)
-//TODO: add hunger and health to maintain and not die
-//TODO: make iron and cactuses breakable
-//TODO: make biomes spawn at least once - check (they all spawn 3 times)
-//TODO: make the map 4x4 and add biome or something for like ocean to make it as island
-//TODO: add more type of tools
-//TODO: add score or ending, goal or something liek that
-//TODO: make some comments in the code and make it readable
-
-//all things I want to do, not in order... I'll add more and delete those I did
-
-
-//TODO : Fix dying? Fix that you don't take hunger down the first hour or it doesn't change? idk just fix it and add death and game reset. Fix all and any bugs while on it
