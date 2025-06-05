@@ -85,7 +85,7 @@ export function makeCraftring() {
         console.log(craftable[0])
         console.log(craftable[0].fishingRod)
         */
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 3; i++) {
             craftable[i].isCraftable ? page[i] = `<button onclick="craftThing(crafting.activeRecipes[${i}])"> ${craftable[i].emoji} </button>` : page[i] = ``;
         }
         page[3] = ``
